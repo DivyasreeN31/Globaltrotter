@@ -136,7 +136,7 @@ const SectionPage = () => {
           </div>
           <div>
             <label className="block text-sm font-semibold text-text-light dark:text-text-dark mb-2">
-              Budget Amount ($)
+              Budget Amount (₹)
             </label>
             <input
               type="text"
@@ -153,11 +153,11 @@ const SectionPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-background-light dark:bg-background-dark p-6 rounded-xl border border-border-light dark:border-border-dark flex items-center gap-4">
               <div className="p-3 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg">
-                <span className="material-icons">attach_money</span>
+                <span className="material-icons">currency_rupee</span>
               </div>
               <div>
                 <p className="text-xs font-medium text-subtext-light dark:text-subtext-dark uppercase tracking-wider mb-1">Budget Allocation</p>
-                <p className="text-2xl font-bold text-text-light dark:text-text-dark">${section.budget || '0.00'}</p>
+                <p className="text-2xl font-bold text-text-light dark:text-text-dark">₹{section.budget || '0.00'}</p>
               </div>
             </div>
             <div className="bg-background-light dark:bg-background-dark p-6 rounded-xl border border-border-light dark:border-border-dark flex items-center gap-4">

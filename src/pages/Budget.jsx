@@ -4,19 +4,21 @@ const Budget = () => {
   const [expandedDays, setExpandedDays] = useState({ 0: true });
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newDay, setNewDay] = useState({ title: '', date: '', budget: '' });
   const [days, setDays] = useState([
     {
-      day: '01', title: 'Arrival in Tokyo', date: 'Oct 12, 2023', budget: '$150.00', activities: [
-        { icon: 'flight_land', iconBg: 'bg-blue-100 dark:bg-blue-900/30', iconColor: 'text-blue-600 dark:text-blue-400', title: 'Land at Narita Airport', time: '10:00 AM', desc: 'Pick up JR Rail Pass and pocket Wi-Fi.', expense: '$25.00', expenseType: 'Transport' },
+      day: '01', title: 'Arrival in Tokyo', date: 'Oct 12, 2023', budget: '₹150.00', activities: [
+        { icon: 'flight_land', iconBg: 'bg-blue-100 dark:bg-blue-900/30', iconColor: 'text-blue-600 dark:text-blue-400', title: 'Land at Narita Airport', time: '10:00 AM', desc: 'Pick up JR Rail Pass and pocket Wi-Fi.', expense: '₹25.00', expenseType: 'Transport' },
         { icon: 'hotel', iconBg: 'bg-purple-100 dark:bg-purple-900/30', iconColor: 'text-purple-600 dark:text-purple-400', title: 'Check-in at Shinjuku Hotel', time: '02:00 PM', desc: 'Hotel Gracery Shinjuku. Rest and freshen up.', expense: 'Paid', expenseType: 'Accommodation' },
-        { icon: 'ramen_dining', iconBg: 'bg-amber-100 dark:bg-amber-900/30', iconColor: 'text-amber-600 dark:text-amber-400', title: 'Dinner at Omoide Yokocho', time: '07:00 PM', desc: 'Try Yakitori alley. Cash only.', expense: '$45.00', expenseType: 'Food' }
+        { icon: 'ramen_dining', iconBg: 'bg-amber-100 dark:bg-amber-900/30', iconColor: 'text-amber-600 dark:text-amber-400', title: 'Dinner at Omoide Yokocho', time: '07:00 PM', desc: 'Try Yakitori alley. Cash only.', expense: '₹45.00', expenseType: 'Food' }
       ]
     },
     {
-      day: '02', title: 'Exploring Asakusa', date: 'Oct 13, 2023', budget: '$85.00', activities: [
+      day: '02', title: 'Exploring Asakusa', date: 'Oct 13, 2023', budget: '₹85.00', activities: [
         { icon: 'temple_buddhist', iconBg: 'bg-red-100 dark:bg-red-900/30', iconColor: 'text-red-600 dark:text-red-400', title: 'Senso-ji Temple', time: '09:00 AM', desc: 'Oldest temple in Tokyo. Try Omikuji.', expense: 'Free', expenseType: 'Entrance' },
-        { icon: 'park', iconBg: 'bg-emerald-100 dark:bg-emerald-900/30', iconColor: 'text-emerald-600 dark:text-emerald-400', title: 'Sumida Park Walk', time: '11:30 AM', desc: 'Walk along the river. Great view of Skytree.', expense: '$15.00', expenseType: 'Snacks' },
-        { icon: 'directions_boat', iconBg: 'bg-sky-100 dark:bg-sky-900/30', iconColor: 'text-sky-600 dark:text-sky-400', title: 'Tokyo Water Bus', time: '02:00 PM', desc: 'Cruise to Odaiba. Scenic route.', expense: '$18.00', expenseType: 'Ticket' }
+        { icon: 'park', iconBg: 'bg-emerald-100 dark:bg-emerald-900/30', iconColor: 'text-emerald-600 dark:text-emerald-400', title: 'Sumida Park Walk', time: '11:30 AM', desc: 'Walk along the river. Great view of Skytree.', expense: '₹15.00', expenseType: 'Snacks' },
+        { icon: 'directions_boat', iconBg: 'bg-sky-100 dark:bg-sky-900/30', iconColor: 'text-sky-600 dark:text-sky-400', title: 'Tokyo Water Bus', time: '02:00 PM', desc: 'Cruise to Odaiba. Scenic route.', expense: '₹18.00', expenseType: 'Ticket' }
       ]
     }
   ]);
@@ -26,16 +28,26 @@ const Budget = () => {
   };
 
   const handleAddDay = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleSaveDay = (e) => {
+    e.preventDefault();
+    if (!newDay.title || !newDay.date) return;
+
     const nextDayNum = (days.length + 1).toString().padStart(2, '0');
-    const newDay = {
+    const dayToSave = {
       day: nextDayNum,
-      title: 'New Adventure Day',
-      date: 'TBD',
-      budget: '$0.00',
+      title: newDay.title,
+      date: newDay.date,
+      budget: `₹${parseFloat(newDay.budget || 0).toFixed(2)}`,
       activities: []
     };
-    setDays([...days, newDay]);
+
+    setDays([...days, dayToSave]);
     setExpandedDays(prev => ({ ...prev, [days.length]: true }));
+    setIsModalOpen(false);
+    setNewDay({ title: '', date: '', budget: '' });
   };
   return (
     <main className="flex-1 overflow-y-auto">
@@ -59,8 +71,8 @@ const Budget = () => {
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
                 className={`inline-flex items-center px-6 py-2 border shadow-sm text-sm font-medium rounded-full transition-all whitespace-nowrap ${activeFilter === filter
-                    ? 'bg-primary text-white border-primary'
-                    : 'text-text-sub-light dark:text-text-sub-dark bg-card-light dark:bg-card-dark border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-800'
+                  ? 'bg-primary text-white border-primary'
+                  : 'text-text-sub-light dark:text-text-sub-dark bg-card-light dark:bg-card-dark border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-800'
                   }`}
               >
                 {filter}
@@ -78,7 +90,7 @@ const Budget = () => {
           <p className="mt-2 text-lg text-text-sub-light dark:text-text-sub-dark">Explore the culture, food, and scenery.</p>
           <div className="mt-4 inline-flex items-center px-4 py-1.5 rounded-full text-sm font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800">
             <span className="material-icons-round text-sm mr-1.5">savings</span>
-            Total Budget: $3,200
+            Total Budget: ₹3,200
           </div>
         </div>
 
@@ -173,6 +185,73 @@ const Budget = () => {
           </button>
         </div>
       </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="bg-surface-light dark:bg-surface-dark w-full max-w-md rounded-2xl shadow-2xl border border-border-light dark:border-border-dark overflow-hidden animate-in zoom-in-95 duration-300">
+            <div className="px-6 py-4 border-b border-border-light dark:border-border-dark flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+              <h3 className="text-xl font-bold text-text-main-light dark:text-text-main-dark">Add New Day</h3>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-text-sub-light dark:text-text-sub-dark hover:text-red-500 transition-colors"
+              >
+                <span className="material-icons-round">close</span>
+              </button>
+            </div>
+            <form onSubmit={handleSaveDay} className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-text-sub-light dark:text-text-sub-dark mb-1">Day Title</label>
+                <input
+                  required
+                  type="text"
+                  placeholder="e.g., Exploring Shibuya"
+                  className="w-full px-4 py-2 rounded-xl border border-border-light dark:border-border-dark bg-white dark:bg-gray-700 text-text-main-light dark:text-text-main-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                  value={newDay.title}
+                  onChange={(e) => setNewDay({ ...newDay, title: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-sub-light dark:text-text-sub-dark mb-1">Date</label>
+                <input
+                  required
+                  type="date"
+                  className="w-full px-4 py-2 rounded-xl border border-border-light dark:border-border-dark bg-white dark:bg-gray-700 text-text-main-light dark:text-text-main-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                  value={newDay.date}
+                  onChange={(e) => setNewDay({ ...newDay, date: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-sub-light dark:text-text-sub-dark mb-1">Estimated Budget (INR)</label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-text-sub-light dark:text-text-sub-dark">₹</span>
+                  <input
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    className="w-full pl-8 pr-4 py-2 rounded-xl border border-border-light dark:border-border-dark bg-white dark:bg-gray-700 text-text-main-light dark:text-text-main-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                    value={newDay.budget}
+                    onChange={(e) => setNewDay({ ...newDay, budget: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex-1 px-4 py-2 rounded-xl border border-border-light dark:border-border-dark text-text-sub-light dark:text-text-sub-dark font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/30 hover:bg-primary-dark hover:-translate-y-0.5 transition-all"
+                >
+                  Create Day
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </main>
   );
 };

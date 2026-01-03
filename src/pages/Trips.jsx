@@ -177,8 +177,8 @@ const Trips = () => {
                       </div>
                       <div className="mt-4 flex items-center justify-between">
                         <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                          <span className="material-icons-outlined text-base">attach_money</span>
-                          <span>Budget: $3,500</span>
+                          <span className="material-icons-outlined text-base">currency_rupee</span>
+                          <span>Budget: ₹3,500</span>
                         </div>
                         <button className="text-primary hover:text-blue-600 dark:hover:text-blue-400 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
                           View Details <span className="material-icons-outlined text-base">arrow_forward</span>

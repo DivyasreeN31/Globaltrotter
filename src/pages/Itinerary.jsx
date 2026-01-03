@@ -74,9 +74,9 @@ const Itinerary = () => {
             <div className="bg-background-light dark:bg-background-dark rounded-lg p-4 border border-border-light dark:border-border-dark flex items-center justify-between group">
               <div>
                 <span className="text-xs font-medium text-subtext-light dark:text-subtext-dark uppercase tracking-wider block mb-1">Budget Allocation</span>
-                <span className="text-sm font-semibold text-text-light dark:text-text-dark">${section.budget}</span>
+                <span className="text-sm font-semibold text-text-light dark:text-text-dark">₹{section.budget}</span>
               </div>
-              <span className="material-icons text-subtext-light dark:text-subtext-dark group-hover:text-green-500 transition-colors">attach_money</span>
+              <span className="material-icons text-subtext-light dark:text-subtext-dark group-hover:text-green-500 transition-colors">currency_rupee</span>
             </div>
           </div>
         </section>
@@ -96,10 +96,10 @@ const Itinerary = () => {
         <div className="text-right">
           <p className="text-xs text-subtext-light dark:text-subtext-dark uppercase tracking-wide">Total Estimated Cost</p>
           <p className="text-2xl font-bold text-text-light dark:text-text-dark">
-            ${sections.reduce((acc, curr) => {
+            ₹{sections.reduce((acc, curr) => {
               const cleanedBudget = (curr.budget || "0").toString().replace(/,/g, '');
               return acc + (parseFloat(cleanedBudget) || 0);
-            }, 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            }, 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
         </div>
         <button className="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-lg font-semibold shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-0.5 active:translate-y-0">

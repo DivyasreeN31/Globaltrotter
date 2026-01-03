@@ -1,4 +1,13 @@
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
 const Trips = () => {
+  const [trips, setTrips] = useState([]);
+
+  useEffect(() => {
+    const storedTrips = JSON.parse(localStorage.getItem('globaltrotter_trips') || '[]');
+    setTrips(storedTrips);
+  }, []);
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow">
       <div className="bg-surface-light dark:bg-surface-dark rounded-lg shadow-sm border border-border-light dark:border-border-dark p-4 mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
@@ -25,6 +34,28 @@ const Trips = () => {
       </div>
 
       <div className="space-y-10">
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Link to="/newtrip" className="md:col-span-1 group flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl bg-surface-light dark:bg-surface-dark hover:bg-gray-50 dark:hover:bg-gray-800/80 hover:border-primary dark:hover:border-primary transition-all duration-300 cursor-pointer h-64">
+            <div className="h-16 w-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 transition-all duration-300 shadow-sm">
+              <span className="material-icons-outlined text-gray-400 group-hover:text-primary transition-colors text-3xl">add</span>
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors">Plan a new trip</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 text-center px-4">Start a new adventure from scratch</p>
+          </Link>
+
+          <div className="md:col-span-2 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl p-8 text-white shadow-lg flex flex-col justify-center relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <span className="material-icons-outlined text-9xl">public</span>
+            </div>
+            <div className="relative z-10">
+              <h2 className="text-2xl font-bold mb-2">Explore the World</h2>
+              <p className="text-blue-100 max-w-lg mb-6">Discover trending destinations and hidden gems for your next journey.</p>
+              <button className="w-max px-6 py-2.5 bg-white text-blue-700 font-semibold rounded-lg shadow-sm hover:bg-blue-50 transition-colors flex items-center gap-2">
+                Explore Destinations <span class="material-icons-outlined text-sm">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+        </section>
         <section>
           <div className="flex items-center gap-3 mb-4">
             <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
@@ -74,6 +105,43 @@ const Trips = () => {
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">Up-coming</h2>
           </div>
           <div className="grid grid-cols-1 gap-6">
+            {trips.map((trip) => (
+              <div key={trip.id} className="group bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+                <div className="flex flex-col md:flex-row">
+                  <div className="md:w-64 h-48 md:h-auto relative">
+                    <img alt={trip.destination} className="w-full h-full object-cover" src={trip.image} />
+                    <div className="absolute bottom-3 left-3 md:hidden">
+                      <h3 class="text-lg font-bold text-white drop-shadow-md">{trip.destination}</h3>
+                    </div>
+                  </div>
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="hidden md:block text-xl font-bold text-gray-900 dark:text-white mb-1">{trip.destination} Trip</h3>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-3">{trip.startDate} - {trip.endDate}</p>
+                        </div>
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                          Planned
+                        </span>
+                      </div>
+                      <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">
+                        Your upcoming trip to {trip.destination}. Get ready for an amazing adventure!
+                      </p>
+                    </div>
+                    <div className="mt-4 flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                        <span className="material-icons-outlined text-base">calendar_today</span>
+                        <span>Upcoming</span>
+                      </div>
+                      <button className="text-primary hover:text-blue-600 dark:hover:text-blue-400 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
+                        View Details <span className="material-icons-outlined text-base">arrow_forward</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
             <div className="group bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
               <div className="flex flex-col md:flex-row">
                 <div className="md:w-64 h-48 md:h-auto relative">

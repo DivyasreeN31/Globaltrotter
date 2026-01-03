@@ -1,4 +1,42 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 const NewTrip = () => {
+  const navigate = useNavigate();
+  const [destination, setDestination] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!destination || !startDate || !endDate) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    const images = [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuD_yxvpc-SJEmfVPk5LeAhxxsvj2UkFUnBpLdg5d81B5ZaccPp_BLavsN6SJUyJABFTRf1EGzFbDwIoRtE4Dt20c1PSz0ZGMY9c-VD_dN1fHwOMbxRlGsyKpPS9GAnJXYvsXwfIyP7HA-yrVLKqZphWBg8H2_Ekd5zF_HmhI_dlNUbAz0ndnZmlsSIsap4G-_Hzc04BcFj32q-oQZrk32lqZOTVSRmlQ33MFTpxyZWjPzyBm38hmOheg4xgKc8JpGbXOZ0k9vonB1VR",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDOZlD3RH9hQfMNbldykDbxA1h452fokRGjGQQyKWjlV1lJKFNldvwuLpw-kvLu70Xoi4pF-Jbt4AKtYtP6YKQUIy84wrRecwVoQLYSM_AmuPBjdmtYGry_GbsILz90Np9VPUmbdvWSSugxuDoNzM1cfoaRECzuyWtSWk4D9e9LHXrLnwMipBLjVhuiR7xJz6hNLBTnP37mP7lFjGQ7XO679LhULlKxGVIkokzvk3AK8B-g9n85p0TBrNQTnNWtRfY_jQiCB-vz43Kp",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuA5Qf_mhETs5btT5yGyj6mPOaKIVIZYWivqVb4oncWdHyMqrs3xHVfEvGn1dJ3Hdqj2Y2fI0lmHggeI2RM4fUQZxKUxPEUeo-x-Ie-ACbRC2jHHKzdQKZjvOUNHNXZZCLw7ygjbX7jcjI2nPnxlxn8JIRcCGRd5uZ05Miipf1e281X8a9666-KhYKvmI8Iv5rOaRqmvZeFIS_Xy7fJ3GxFO4ZQZ2rLoqjxtDtF7a6A6PH0FO7S16o781JPxCeXtHxNDN5dBVejjo55i",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBubE4u-dFw1X7qMibPgluIAf00YCB5p_yvROoZB-w2-98yYIFpI3WJBAlb_JgE0bGOVVSg769-R0rUG4N0Ji__80hcZox_tF5R1Bfx0PAzhXMDgflt2q3xfgSi_psdkfYYd-qWB7TxlJsgV9lNzcaVkeKM8LW-OFL63IwDVXwAGZccuLK-T721TpfY4c3vXfze_iNS1waNK9-qhyWWw_VmXAeYw6XdlEto5OI6Dt9kD7KisbsIHEBTBU22sjSRwoRwFqnPa9BGxrCe"
+    ];
+    const randomImage = images[Math.floor(Math.random() * images.length)];
+
+    const newTrip = {
+      id: Date.now().toString(),
+      destination,
+      startDate,
+      endDate,
+      image: randomImage,
+      status: 'planned'
+    };
+
+    const existingTrips = JSON.parse(localStorage.getItem('globaltrotter_trips') || '[]');
+    existingTrips.unshift(newTrip);
+    localStorage.setItem('globaltrotter_trips', JSON.stringify(existingTrips));
+
+    navigate('/trips');
+  };
   return (
     <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
       <div className="md:flex md:items-center md:justify-between mb-8">
@@ -20,7 +58,7 @@ const NewTrip = () => {
           </h3>
         </div>
         <div className="px-4 py-5 sm:p-6">
-          <form className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+          <form className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6" onSubmit={handleSubmit}>
             <div className="sm:col-span-6">
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300" htmlFor="destination">
                 Select a Place
@@ -29,7 +67,15 @@ const NewTrip = () => {
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <span className="material-icons text-slate-400 text-lg">place</span>
                 </div>
-                <input className="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400" id="destination" name="destination" placeholder="Where do you want to go? e.g. Paris, Tokyo" type="text" />
+                <input
+                  className="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400"
+                  id="destination"
+                  name="destination"
+                  placeholder="Where do you want to go? e.g. Paris, Tokyo"
+                  type="text"
+                  value={destination}
+                  onChange={(e) => setDestination(e.target.value)}
+                />
               </div>
             </div>
             <div className="sm:col-span-3">
@@ -40,7 +86,14 @@ const NewTrip = () => {
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <span className="material-icons text-slate-400 text-lg">calendar_today</span>
                 </div>
-                <input className="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400" id="start-date" name="start-date" type="date" />
+                <input
+                  className="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400"
+                  id="start-date"
+                  name="start-date"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
               </div>
             </div>
             <div className="sm:col-span-3">
@@ -51,7 +104,14 @@ const NewTrip = () => {
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <span className="material-icons text-slate-400 text-lg">event</span>
                 </div>
-                <input className="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400" id="end-date" name="end-date" type="date" />
+                <input
+                  className="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400"
+                  id="end-date"
+                  name="end-date"
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
               </div>
             </div>
           </form>

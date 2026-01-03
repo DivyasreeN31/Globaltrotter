@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Create New Trip - GlobalTrotter</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-<script>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Create New Trip - GlobalTrotter</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -29,280 +31,401 @@
             },
         };
     </script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-<style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <style>
         body {
             font-family: 'Inter', sans-serif;
         }
     </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 min-h-screen flex flex-col font-body transition-colors duration-200">
-<nav class="bg-surface-light dark:bg-surface-dark border-b border-border-light dark:border-border-dark sticky top-0 z-10 shadow-sm">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="flex justify-between h-16">
-<div class="flex items-center">
-<a class="flex-shrink-0 flex items-center" href="#">
-<span class="material-icons text-primary text-3xl mr-2">public</span>
-<span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">GlobalTrotter</span>
-</a>
-<div class="hidden md:ml-10 md:flex md:space-x-8">
-<a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-white dark:hover:border-slate-400" href="#">
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 min-h-screen flex flex-col font-body transition-colors duration-200">
+    <nav
+        class="bg-surface-light dark:bg-surface-dark border-b border-border-light dark:border-border-dark sticky top-0 z-10 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a class="flex-shrink-0 flex items-center" href="#">
+                        <span class="material-icons text-primary text-3xl mr-2">public</span>
+                        <span
+                            class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">GlobalTrotter</span>
+                    </a>
+                    <div class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-white dark:hover:border-slate-400"
+                            href="#">
                             Dashboard
                         </a>
-<a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-white dark:hover:border-slate-400" href="#">
+                        <a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-white dark:hover:border-slate-400"
+                            href="#">
                             My Trips
                         </a>
-<a class="inline-flex items-center px-1 pt-1 border-b-2 border-primary text-sm font-medium text-slate-900 dark:text-white" href="#">
+                        <a class="inline-flex items-center px-1 pt-1 border-b-2 border-primary text-sm font-medium text-slate-900 dark:text-white"
+                            href="#">
                             Explore
                         </a>
-<a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-white dark:hover:border-slate-400" href="#">
+                        <a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-white dark:hover:border-slate-400"
+                            href="#">
                             Community
                         </a>
-<a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-white dark:hover:border-slate-400" href="#">
+                        <a class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-white dark:hover:border-slate-400"
+                            href="#">
                             Settings
                         </a>
-</div>
-</div>
-<div class="flex items-center space-x-4">
-<button class="p-2 rounded-full text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
-<span class="sr-only">View notifications</span>
-<span class="material-icons">notifications</span>
-</button>
-<div class="relative flex-shrink-0">
-<button class="bg-surface-light dark:bg-surface-dark flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
-<span class="sr-only">Open user menu</span>
-<div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-300 overflow-hidden">
-<span class="material-icons text-sm">person</span>
-</div>
-</button>
-</div>
-<div class="-mr-2 flex items-center md:hidden">
-<button class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary" type="button">
-<span class="sr-only">Open main menu</span>
-<span class="material-icons block h-6 w-6">menu</span>
-</button>
-</div>
-</div>
-</div>
-</div>
-<div class="md:hidden hidden" id="mobile-menu">
-<div class="pt-2 pb-3 space-y-1">
-<a class="bg-primary/10 border-l-4 border-primary text-primary block pl-3 pr-4 py-2 text-base font-medium" href="#">Dashboard</a>
-<a class="border-l-4 border-transparent text-slate-500 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-700 block pl-3 pr-4 py-2 text-base font-medium dark:text-slate-400 dark:hover:bg-slate-800" href="#">My Trips</a>
-<a class="border-l-4 border-transparent text-slate-500 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-700 block pl-3 pr-4 py-2 text-base font-medium dark:text-slate-400 dark:hover:bg-slate-800" href="#">Explore</a>
-<a class="border-l-4 border-transparent text-slate-500 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-700 block pl-3 pr-4 py-2 text-base font-medium dark:text-slate-400 dark:hover:bg-slate-800" href="#">Community</a>
-<a class="border-l-4 border-transparent text-slate-500 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-700 block pl-3 pr-4 py-2 text-base font-medium dark:text-slate-400 dark:hover:bg-slate-800" href="#">Settings</a>
-</div>
-</div>
-</nav>
-<main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-<div class="md:flex md:items-center md:justify-between mb-8">
-<div class="flex-1 min-w-0">
-<h1 class="text-2xl font-bold leading-7 text-slate-900 dark:text-white sm:text-3xl sm:truncate">
-                Create a New Trip
-            </h1>
-<p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                Start planning your next adventure by filling out the details below.
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button
+                        class="p-2 rounded-full text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
+                        <span class="sr-only">View notifications</span>
+                        <span class="material-icons">notifications</span>
+                    </button>
+                    <div class="relative flex-shrink-0">
+                        <button
+                            class="bg-surface-light dark:bg-surface-dark flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
+                            <span class="sr-only">Open user menu</span>
+                            <div
+                                class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-300 overflow-hidden">
+                                <span class="material-icons text-sm">person</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="-mr-2 flex items-center md:hidden">
+                        <button
+                            class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+                            type="button">
+                            <span class="sr-only">Open main menu</span>
+                            <span class="material-icons block h-6 w-6">menu</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="pt-2 pb-3 space-y-1">
+                <a class="bg-primary/10 border-l-4 border-primary text-primary block pl-3 pr-4 py-2 text-base font-medium"
+                    href="#">Dashboard</a>
+                <a class="border-l-4 border-transparent text-slate-500 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-700 block pl-3 pr-4 py-2 text-base font-medium dark:text-slate-400 dark:hover:bg-slate-800"
+                    href="#">My Trips</a>
+                <a class="border-l-4 border-transparent text-slate-500 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-700 block pl-3 pr-4 py-2 text-base font-medium dark:text-slate-400 dark:hover:bg-slate-800"
+                    href="#">Explore</a>
+                <a class="border-l-4 border-transparent text-slate-500 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-700 block pl-3 pr-4 py-2 text-base font-medium dark:text-slate-400 dark:hover:bg-slate-800"
+                    href="#">Community</a>
+                <a class="border-l-4 border-transparent text-slate-500 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-700 block pl-3 pr-4 py-2 text-base font-medium dark:text-slate-400 dark:hover:bg-slate-800"
+                    href="#">Settings</a>
+            </div>
+        </div>
+    </nav>
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <div class="md:flex md:items-center md:justify-between mb-8">
+            <div class="flex-1 min-w-0">
+                <h1 class="text-2xl font-bold leading-7 text-slate-900 dark:text-white sm:text-3xl sm:truncate">
+                    Create a New Trip
+                </h1>
+                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                    Start planning your next adventure by filling out the details below.
+                </p>
+            </div>
+        </div>
+        <div
+            class="bg-surface-light dark:bg-surface-dark shadow rounded-lg overflow-hidden border border-border-light dark:border-border-dark mb-10">
+            <div
+                class="px-4 py-5 sm:px-6 border-b border-border-light dark:border-border-dark bg-slate-50 dark:bg-slate-800/50">
+                <h3 class="text-lg leading-6 font-medium text-slate-900 dark:text-white flex items-center">
+                    <span class="material-icons text-primary mr-2 text-base">edit_calendar</span>
+                    Plan a new trip
+                </h3>
+            </div>
+            <div class="px-4 py-5 sm:p-6">
+                <form id="createTripForm" class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="sm:col-span-6">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="destination">
+                            Select a Place
+                        </label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="material-icons text-slate-400 text-lg">place</span>
+                            </div>
+                            <input
+                                class="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400"
+                                id="destination" name="destination"
+                                placeholder="Where do you want to go? e.g. Paris, Tokyo" type="text" />
+                        </div>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="start-date">
+                            Start Date
+                        </label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="material-icons text-slate-400 text-lg">calendar_today</span>
+                            </div>
+                            <input
+                                class="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400"
+                                id="start-date" name="start-date" type="date" />
+                        </div>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="end-date">
+                            End Date
+                        </label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="material-icons text-slate-400 text-lg">event</span>
+                            </div>
+                            <input
+                                class="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400"
+                                id="end-date" name="end-date" type="date" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div
+                class="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 text-right sm:px-6 border-t border-border-light dark:border-border-dark">
+                <button form="createTripForm"
+                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
+                    type="submit">
+                    Start Planning
+                </button>
+            </div>
+        </div>
+        <div class="space-y-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-slate-900 dark:text-white flex items-center">
+                    <span class="material-icons text-primary mr-2">explore</span>
+                    Suggestions for Places to Visit / Activities
+                </h2>
+                <a class="text-sm font-medium text-primary hover:text-sky-600 dark:hover:text-sky-400 flex items-center"
+                    href="#">
+                    See all
+                    <span class="material-icons text-base ml-1">arrow_forward</span>
+                </a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div
+                    class="group relative bg-surface-light dark:bg-surface-dark rounded-lg shadow-sm border border-border-light dark:border-border-dark hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer">
+                    <div class="aspect-w-3 aspect-h-2 bg-slate-200 dark:bg-slate-700 relative overflow-hidden">
+                        <img alt="Eiffel tower view from street"
+                            class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJk1m2-6XjywezphXRbriOKXbHEDypXQ3wC3O3BHwT3dPsuApTHfEzRxEPSMYvkTKYZ0B2TTosFfOOYRTdtBIu7u_fEg7bJGYaP9uGaCDH3ngBo5gepuTJxc5kaThmCK2n7IMGvWsRMYpr3cjSCZ-FjIT2vVm_xc9WKhowT89pRNd0SrRXxwu_0URM1R-2xNgNjlrHw4WVuF304YNIUBz6_bdkQewIsPj6svMGP6UEO7KfdAspzsIYjN2maFVDR7biY6By02SYYdVY" />
+                        <div class="absolute top-2 right-2 bg-white dark:bg-slate-900 p-1.5 rounded-full shadow-sm">
+                            <span
+                                class="material-icons text-slate-400 hover:text-red-500 text-sm block">favorite_border</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3
+                                    class="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                    Paris City Tour</h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">France</p>
+                            </div>
+                            <span
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                Popular
+                            </span>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                            <span class="flex items-center"><span class="material-icons text-sm mr-1">star</span>
+                                4.8</span>
+                            <span>$120 / person</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="group relative bg-surface-light dark:bg-surface-dark rounded-lg shadow-sm border border-border-light dark:border-border-dark hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer">
+                    <div class="aspect-w-3 aspect-h-2 bg-slate-200 dark:bg-slate-700 relative overflow-hidden">
+                        <img alt="Tokyo street at night"
+                            class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5ShFOALPaHicmeSYlhIduRQ6dKeL-vQv7pz2uoPtgHhwc76tH0_j8kEUKZcMRj0KiCQ7rwBMvs5kuEc0XqB2h93zd9sXfBZ_UHaFQVSbCRD0Rfz4EnXrLfYgEYtydh6SNcQoVTLud05SunElomeKybddXVPfWAFkSXz2E4y1vDjBAtSgEWCHxhv_jzU8vVac1QrtPjyA2aSsEUmN-DGJEf1sKBT495X1VWPsAsKR7H5ov7RY2ZiXjV8UNloZeZaPyvnMqzG8gOJFw" />
+                        <div class="absolute top-2 right-2 bg-white dark:bg-slate-900 p-1.5 rounded-full shadow-sm">
+                            <span
+                                class="material-icons text-slate-400 hover:text-red-500 text-sm block">favorite_border</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3
+                                    class="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                    Tokyo Night Walk</h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Japan</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                            <span class="flex items-center"><span class="material-icons text-sm mr-1">star</span>
+                                4.9</span>
+                            <span>$45 / person</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="group relative bg-surface-light dark:bg-surface-dark rounded-lg shadow-sm border border-border-light dark:border-border-dark hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer">
+                    <div class="aspect-w-3 aspect-h-2 bg-slate-200 dark:bg-slate-700 relative overflow-hidden">
+                        <img alt="Beach with palm trees"
+                            class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGz3CBQplrc6H4r5zDznEiafwaTxjmtIPwv-Pjb55jnPPB6ZzbkrEbCisBl7ZXJJGyDJ4OY1_Co9EtM6x-jGLy88_YWIU_iffVWQDojBC-uvMuk0EdxHGFnVUYljwZ021eyOJ7JUM5tb5hYziylt7-J-yhijXleuZcQGgoJ5SHCAOigjh3yWyS7VYh7uuUoBJ-q5kMt913K7lMQK6JF8rrZHPKurerCtaEQo9DHu_M-EbkM_Ruz-o0ahLDdhfxWvfmHjIJMdURF5I9" />
+                        <div class="absolute top-2 right-2 bg-white dark:bg-slate-900 p-1.5 rounded-full shadow-sm">
+                            <span
+                                class="material-icons text-slate-400 hover:text-red-500 text-sm block">favorite_border</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3
+                                    class="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                    Bali Beach Retreat</h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Indonesia</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                            <span class="flex items-center"><span class="material-icons text-sm mr-1">star</span>
+                                4.7</span>
+                            <span>$800 / week</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="group relative bg-surface-light dark:bg-surface-dark rounded-lg shadow-sm border border-border-light dark:border-border-dark hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer">
+                    <div class="aspect-w-3 aspect-h-2 bg-slate-200 dark:bg-slate-700 relative overflow-hidden">
+                        <img alt="Pyramids of Giza"
+                            class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHO4Us8wC5NLg-2Q9iOiWGMdDFfKIXI0qaSenek-rNgVoUSkYIW-zUDcqobBksgC01rsK9L2vvGTy2Hf2d0Wd-hRn1cT_lfgPXrJFESjLeOmk9urd66ZIH_rigm24YMMODJCAsaTm3Ol-N9iDjIcKdVvdLUYYS8KVaG1-eFnUCEcCiX76Ykk1F6BP59swyI-JANIYZHVSDJOsCSGB6htjFau764PLtx1smFXzhGuOSeCLGsOeZvESl7sLTdo0-jP4MlW9pOGpIaNI2" />
+                        <div class="absolute top-2 right-2 bg-white dark:bg-slate-900 p-1.5 rounded-full shadow-sm">
+                            <span
+                                class="material-icons text-slate-400 hover:text-red-500 text-sm block">favorite_border</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3
+                                    class="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                    Pyramid Exploration</h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Egypt</p>
+                            </div>
+                            <span
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
+                                Adventure
+                            </span>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                            <span class="flex items-center"><span class="material-icons text-sm mr-1">star</span>
+                                4.6</span>
+                            <span>$200 / person</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="group relative bg-surface-light dark:bg-surface-dark rounded-lg shadow-sm border border-border-light dark:border-border-dark hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer">
+                    <div class="aspect-w-3 aspect-h-2 bg-slate-200 dark:bg-slate-700 relative overflow-hidden">
+                        <img alt="Swiss Alps landscape"
+                            class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBt7l0sdH7j0ArWQS3OvO62B4Zg08xed1OvAT9dJwK2Xwtu6KKmCUrwossxle94lAzBVMpBA1Ftf6qdI_Tsav_zxeOhFAsJOwC41MNx3S_7fRUqShTlcFwa-V7P7uNVc5atjYqpNSLuZExUkvYmUgBb0IBfW-_os_N1sgMsfk1MQ5XFHKM5a92T7nb1J_7Q0S-t16F8SutfFcheJwQFRouMitKnfAo2kameCHL35ym8tgvFlAluAvhUvikDAfAlu7g_0i6aCeLZ76xh" />
+                        <div class="absolute top-2 right-2 bg-white dark:bg-slate-900 p-1.5 rounded-full shadow-sm">
+                            <span
+                                class="material-icons text-slate-400 hover:text-red-500 text-sm block">favorite_border</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3
+                                    class="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                    Alpine Hiking</h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Switzerland</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                            <span class="flex items-center"><span class="material-icons text-sm mr-1">star</span>
+                                5.0</span>
+                            <span>Free</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="group relative bg-surface-light dark:bg-surface-dark rounded-lg shadow-sm border border-border-light dark:border-border-dark hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer">
+                    <div class="aspect-w-3 aspect-h-2 bg-slate-200 dark:bg-slate-700 relative overflow-hidden">
+                        <img alt="Resort pool"
+                            class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDik--dfL9XH9-NcQu4IXkjp6kM1ASTnvpQse3izR2kKuiQz5P6ywAR5vLLv3JVJonLbskotgYMEYH28_P4x2xICxezTAPKLmU6j9aZ53pKtnBTVDYCm395b-2lK0z8upWxP72fpz0M0jR060i4wFvsIaGWoRVM-kaYqf9dvbfqNGwf3dmZMbe3ZTaxGuNH2KEFTL-mHmge0o5uBc9WDRe1cZifM76nLt7Aqtb4YHE6hyteBdal1b2rsg5XL1LmxfmAPnMOJlCz8sH0" />
+                        <div class="absolute top-2 right-2 bg-white dark:bg-slate-900 p-1.5 rounded-full shadow-sm">
+                            <span
+                                class="material-icons text-slate-400 hover:text-red-500 text-sm block">favorite_border</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3
+                                    class="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                    Luxury Escape</h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Maldives</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
+                            <span class="flex items-center"><span class="material-icons text-sm mr-1">star</span>
+                                4.9</span>
+                            <span>$1200 / night</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-surface-light dark:bg-surface-dark border-t border-border-light dark:border-border-dark mt-auto">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-slate-500 dark:text-slate-400">
+                © 2024 GlobalTrotter Inc. All rights reserved.
             </p>
-</div>
-</div>
-<div class="bg-surface-light dark:bg-surface-dark shadow rounded-lg overflow-hidden border border-border-light dark:border-border-dark mb-10">
-<div class="px-4 py-5 sm:px-6 border-b border-border-light dark:border-border-dark bg-slate-50 dark:bg-slate-800/50">
-<h3 class="text-lg leading-6 font-medium text-slate-900 dark:text-white flex items-center">
-<span class="material-icons text-primary mr-2 text-base">edit_calendar</span>
-                Plan a new trip
-            </h3>
-</div>
-<div class="px-4 py-5 sm:p-6">
-<form class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-<div class="sm:col-span-6">
-<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="destination">
-                        Select a Place
-                    </label>
-<div class="mt-1 relative rounded-md shadow-sm">
-<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-<span class="material-icons text-slate-400 text-lg">place</span>
-</div>
-<input class="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400" id="destination" name="destination" placeholder="Where do you want to go? e.g. Paris, Tokyo" type="text"/>
-</div>
-</div>
-<div class="sm:col-span-3">
-<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="start-date">
-                        Start Date
-                    </label>
-<div class="mt-1 relative rounded-md shadow-sm">
-<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-<span class="material-icons text-slate-400 text-lg">calendar_today</span>
-</div>
-<input class="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400" id="start-date" name="start-date" type="date"/>
-</div>
-</div>
-<div class="sm:col-span-3">
-<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="end-date">
-                        End Date
-                    </label>
-<div class="mt-1 relative rounded-md shadow-sm">
-<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-<span class="material-icons text-slate-400 text-lg">event</span>
-</div>
-<input class="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400" id="end-date" name="end-date" type="date"/>
-</div>
-</div>
-</form>
-</div>
-<div class="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 text-right sm:px-6 border-t border-border-light dark:border-border-dark">
-<button class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors" type="submit">
-                Start Planning
-            </button>
-</div>
-</div>
-<div class="space-y-6">
-<div class="flex items-center justify-between">
-<h2 class="text-xl font-semibold text-slate-900 dark:text-white flex items-center">
-<span class="material-icons text-primary mr-2">explore</span>
-                Suggestions for Places to Visit / Activities
-            </h2>
-<a class="text-sm font-medium text-primary hover:text-sky-600 dark:hover:text-sky-400 flex items-center" href="#">
-                See all
-                <span class="material-icons text-base ml-1">arrow_forward</span>
-</a>
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-<div class="group relative bg-surface-light dark:bg-surface-dark rounded-lg shadow-sm border border-border-light dark:border-border-dark hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer">
-<div class="aspect-w-3 aspect-h-2 bg-slate-200 dark:bg-slate-700 relative overflow-hidden">
-<img alt="Eiffel tower view from street" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJk1m2-6XjywezphXRbriOKXbHEDypXQ3wC3O3BHwT3dPsuApTHfEzRxEPSMYvkTKYZ0B2TTosFfOOYRTdtBIu7u_fEg7bJGYaP9uGaCDH3ngBo5gepuTJxc5kaThmCK2n7IMGvWsRMYpr3cjSCZ-FjIT2vVm_xc9WKhowT89pRNd0SrRXxwu_0URM1R-2xNgNjlrHw4WVuF304YNIUBz6_bdkQewIsPj6svMGP6UEO7KfdAspzsIYjN2maFVDR7biY6By02SYYdVY"/>
-<div class="absolute top-2 right-2 bg-white dark:bg-slate-900 p-1.5 rounded-full shadow-sm">
-<span class="material-icons text-slate-400 hover:text-red-500 text-sm block">favorite_border</span>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">Paris City Tour</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">France</p>
-</div>
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                            Popular
-                        </span>
-</div>
-<div class="mt-4 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
-<span class="flex items-center"><span class="material-icons text-sm mr-1">star</span> 4.8</span>
-<span>$120 / person</span>
-</div>
-</div>
-</div>
-<div class="group relative bg-surface-light dark:bg-surface-dark rounded-lg shadow-sm border border-border-light dark:border-border-dark hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer">
-<div class="aspect-w-3 aspect-h-2 bg-slate-200 dark:bg-slate-700 relative overflow-hidden">
-<img alt="Tokyo street at night" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5ShFOALPaHicmeSYlhIduRQ6dKeL-vQv7pz2uoPtgHhwc76tH0_j8kEUKZcMRj0KiCQ7rwBMvs5kuEc0XqB2h93zd9sXfBZ_UHaFQVSbCRD0Rfz4EnXrLfYgEYtydh6SNcQoVTLud05SunElomeKybddXVPfWAFkSXz2E4y1vDjBAtSgEWCHxhv_jzU8vVac1QrtPjyA2aSsEUmN-DGJEf1sKBT495X1VWPsAsKR7H5ov7RY2ZiXjV8UNloZeZaPyvnMqzG8gOJFw"/>
-<div class="absolute top-2 right-2 bg-white dark:bg-slate-900 p-1.5 rounded-full shadow-sm">
-<span class="material-icons text-slate-400 hover:text-red-500 text-sm block">favorite_border</span>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">Tokyo Night Walk</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Japan</p>
-</div>
-</div>
-<div class="mt-4 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
-<span class="flex items-center"><span class="material-icons text-sm mr-1">star</span> 4.9</span>
-<span>$45 / person</span>
-</div>
-</div>
-</div>
-<div class="group relative bg-surface-light dark:bg-surface-dark rounded-lg shadow-sm border border-border-light dark:border-border-dark hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer">
-<div class="aspect-w-3 aspect-h-2 bg-slate-200 dark:bg-slate-700 relative overflow-hidden">
-<img alt="Beach with palm trees" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGz3CBQplrc6H4r5zDznEiafwaTxjmtIPwv-Pjb55jnPPB6ZzbkrEbCisBl7ZXJJGyDJ4OY1_Co9EtM6x-jGLy88_YWIU_iffVWQDojBC-uvMuk0EdxHGFnVUYljwZ021eyOJ7JUM5tb5hYziylt7-J-yhijXleuZcQGgoJ5SHCAOigjh3yWyS7VYh7uuUoBJ-q5kMt913K7lMQK6JF8rrZHPKurerCtaEQo9DHu_M-EbkM_Ruz-o0ahLDdhfxWvfmHjIJMdURF5I9"/>
-<div class="absolute top-2 right-2 bg-white dark:bg-slate-900 p-1.5 rounded-full shadow-sm">
-<span class="material-icons text-slate-400 hover:text-red-500 text-sm block">favorite_border</span>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">Bali Beach Retreat</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Indonesia</p>
-</div>
-</div>
-<div class="mt-4 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
-<span class="flex items-center"><span class="material-icons text-sm mr-1">star</span> 4.7</span>
-<span>$800 / week</span>
-</div>
-</div>
-</div>
-<div class="group relative bg-surface-light dark:bg-surface-dark rounded-lg shadow-sm border border-border-light dark:border-border-dark hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer">
-<div class="aspect-w-3 aspect-h-2 bg-slate-200 dark:bg-slate-700 relative overflow-hidden">
-<img alt="Pyramids of Giza" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHO4Us8wC5NLg-2Q9iOiWGMdDFfKIXI0qaSenek-rNgVoUSkYIW-zUDcqobBksgC01rsK9L2vvGTy2Hf2d0Wd-hRn1cT_lfgPXrJFESjLeOmk9urd66ZIH_rigm24YMMODJCAsaTm3Ol-N9iDjIcKdVvdLUYYS8KVaG1-eFnUCEcCiX76Ykk1F6BP59swyI-JANIYZHVSDJOsCSGB6htjFau764PLtx1smFXzhGuOSeCLGsOeZvESl7sLTdo0-jP4MlW9pOGpIaNI2"/>
-<div class="absolute top-2 right-2 bg-white dark:bg-slate-900 p-1.5 rounded-full shadow-sm">
-<span class="material-icons text-slate-400 hover:text-red-500 text-sm block">favorite_border</span>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">Pyramid Exploration</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Egypt</p>
-</div>
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
-                            Adventure
-                        </span>
-</div>
-<div class="mt-4 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
-<span class="flex items-center"><span class="material-icons text-sm mr-1">star</span> 4.6</span>
-<span>$200 / person</span>
-</div>
-</div>
-</div>
-<div class="group relative bg-surface-light dark:bg-surface-dark rounded-lg shadow-sm border border-border-light dark:border-border-dark hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer">
-<div class="aspect-w-3 aspect-h-2 bg-slate-200 dark:bg-slate-700 relative overflow-hidden">
-<img alt="Swiss Alps landscape" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBt7l0sdH7j0ArWQS3OvO62B4Zg08xed1OvAT9dJwK2Xwtu6KKmCUrwossxle94lAzBVMpBA1Ftf6qdI_Tsav_zxeOhFAsJOwC41MNx3S_7fRUqShTlcFwa-V7P7uNVc5atjYqpNSLuZExUkvYmUgBb0IBfW-_os_N1sgMsfk1MQ5XFHKM5a92T7nb1J_7Q0S-t16F8SutfFcheJwQFRouMitKnfAo2kameCHL35ym8tgvFlAluAvhUvikDAfAlu7g_0i6aCeLZ76xh"/>
-<div class="absolute top-2 right-2 bg-white dark:bg-slate-900 p-1.5 rounded-full shadow-sm">
-<span class="material-icons text-slate-400 hover:text-red-500 text-sm block">favorite_border</span>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">Alpine Hiking</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Switzerland</p>
-</div>
-</div>
-<div class="mt-4 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
-<span class="flex items-center"><span class="material-icons text-sm mr-1">star</span> 5.0</span>
-<span>Free</span>
-</div>
-</div>
-</div>
-<div class="group relative bg-surface-light dark:bg-surface-dark rounded-lg shadow-sm border border-border-light dark:border-border-dark hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer">
-<div class="aspect-w-3 aspect-h-2 bg-slate-200 dark:bg-slate-700 relative overflow-hidden">
-<img alt="Resort pool" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDik--dfL9XH9-NcQu4IXkjp6kM1ASTnvpQse3izR2kKuiQz5P6ywAR5vLLv3JVJonLbskotgYMEYH28_P4x2xICxezTAPKLmU6j9aZ53pKtnBTVDYCm395b-2lK0z8upWxP72fpz0M0jR060i4wFvsIaGWoRVM-kaYqf9dvbfqNGwf3dmZMbe3ZTaxGuNH2KEFTL-mHmge0o5uBc9WDRe1cZifM76nLt7Aqtb4YHE6hyteBdal1b2rsg5XL1LmxfmAPnMOJlCz8sH0"/>
-<div class="absolute top-2 right-2 bg-white dark:bg-slate-900 p-1.5 rounded-full shadow-sm">
-<span class="material-icons text-slate-400 hover:text-red-500 text-sm block">favorite_border</span>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">Luxury Escape</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Maldives</p>
-</div>
-</div>
-<div class="mt-4 flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
-<span class="flex items-center"><span class="material-icons text-sm mr-1">star</span> 4.9</span>
-<span>$1200 / night</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</main>
-<footer class="bg-surface-light dark:bg-surface-dark border-t border-border-light dark:border-border-dark mt-auto">
-<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-<p class="text-center text-sm text-slate-500 dark:text-slate-400">
-            © 2024 GlobalTrotter Inc. All rights reserved.
-        </p>
-</div>
-</footer>
-</body></html>
+        </div>
+    </footer>
+    <script>
+        document.getElementById('createTripForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const destination = document.getElementById('destination').value;
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+
+            if (!destination || !startDate || !endDate) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Random image generator for demo purposes
+            const images = [
+                "https://lh3.googleusercontent.com/aida-public/AB6AXuD_yxvpc-SJEmfVPk5LeAhxxsvj2UkFUnBpLdg5d81B5ZaccPp_BLavsN6SJUyJABFTRf1EGzFbDwIoRtE4Dt20c1PSz0ZGMY9c-VD_dN1fHwOMbxRlGsyKpPS9GAnJXYvsXwfIyP7HA-yrVLKqZphWBg8H2_Ekd5zF_HmhI_dlNUbAz0ndnZmlsSIsap4G-_Hzc04BcFj32q-oQZrk32lqZOTVSRmlQ33MFTpxyZWjPzyBm38hmOheg4xgKc8JpGbXOZ0k9vonB1VR",
+                "https://lh3.googleusercontent.com/aida-public/AB6AXuDOZlD3RH9hQfMNbldykDbxA1h452fokRGjGQQyKWjlV1lJKFNldvwuLpw-kvLu70Xoi4pF-Jbt4AKtYtP6YKQUIy84wrRecwVoQLYSM_AmuPBjdmtYGry_GbsILz90Np9VPUmbdvWSSugxuDoNzM1cfoaRECzuyWtSWk4D9e9LHXrLnwMipBLjVhuiR7xJz6hNLBTnP37mP7lFjGQ7XO679LhULlKxGVIkokzvk3AK8B-g9n85p0TBrNQTnNWtRfY_jQiCB-vz43Kp",
+                "https://lh3.googleusercontent.com/aida-public/AB6AXuA5Qf_mhETs5btT5yGyj6mPOaKIVIZYWivqVb4oncWdHyMqrs3xHVfEvGn1dJ3Hdqj2Y2fI0lmHggeI2RM4fUQZxKUxPEUeo-x-Ie-ACbRC2jHHKzdQKZjvOUNHNXZZCLw7ygjbX7jcjI2nPnxlxn8JIRcCGRd5uZ05Miipf1e281X8a9666-KhYKvmI8Iv5rOaRqmvZeFIS_Xy7fJ3GxFO4ZQZ2rLoqjxtDtF7a6A6PH0FO7S16o781JPxCeXtHxNDN5dBVejjo55i",
+                "https://lh3.googleusercontent.com/aida-public/AB6AXuBubE4u-dFw1X7qMibPgluIAf00YCB5p_yvROoZB-w2-98yYIFpI3WJBAlb_JgE0bGOVVSg769-R0rUG4N0Ji__80hcZox_tF5R1Bfx0PAzhXMDgflt2q3xfgSi_psdkfYYd-qWB7TxlJsgV9lNzcaVkeKM8LW-OFL63IwDVXwAGZccuLK-T721TpfY4c3vXfze_iNS1waNK9-qhyWWw_VmXAeYw6XdlEto5OI6Dt9kD7KisbsIHEBTBU22sjSRwoRwFqnPa9BGxrCe"
+            ];
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+
+            const newTrip = {
+                id: Date.now().toString(),
+                destination: destination,
+                startDate: startDate,
+                endDate: endDate,
+                image: randomImage,
+                status: 'planned'
+            };
+
+            // Get existing trips or init empty array
+            const existingTrips = JSON.parse(localStorage.getItem('globaltrotter_trips') || '[]');
+            existingTrips.unshift(newTrip); // Add to beginning
+
+            // Save back to local storage
+            localStorage.setItem('globaltrotter_trips', JSON.stringify(existingTrips));
+
+            // Redirect to trips page
+            window.location.href = 'Trips.html';
+        });
+    </script>
+</body>
+
+</html>

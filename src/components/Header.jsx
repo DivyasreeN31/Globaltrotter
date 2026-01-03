@@ -92,7 +92,17 @@ const Header = () => {
             {isAuthenticated && (
               <nav className="hidden md:flex items-center gap-1">
                 <Link 
-                  to="/explore" 
+                  to="/trips" 
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                    isActive('/trips') 
+                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20' 
+                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  My Trips
+                </Link>
+                <Link 
+                  to="/explore"
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
                     isActive('/explore') 
                       ? 'text-primary bg-blue-50 dark:bg-blue-900/20' 

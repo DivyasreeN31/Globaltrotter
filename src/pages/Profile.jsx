@@ -2,6 +2,15 @@ import { useState, useEffect } from 'react';
 
 const Profile = () => {
   const [pastTrips, setPastTrips] = useState([]);
+  const [preplannedTrips, setPreplannedTrips] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({
+    destination: '',
+    startDate: '',
+    endDate: '',
+    img: ''
+  });
+  const [isLoadingPhotos, setIsLoadingPhotos] = useState(false);
 
   useEffect(() => {
     // Get trips from localStorage
@@ -12,15 +21,61 @@ const Profile = () => {
       { title: 'Australian Coast', date: 'Nov 2022', rating: 5, desc: 'Surfing in Bondi, hiking in the Blue Mountains, and coffee culture in Melbourne.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBBw_GtUvlUT5lQ-JUPu3WFgwl88VyJw7c2cTJfGJyf0PFHzzLVc5KlqhojJl3VauekuuOmgJGVY_0gknnMv8NUTGEmrOK031WU8SgNO2Q8NnyfpBk_jO2cZL8Btzy-fUpJy2hiBlt06EiLj7VsiqzrZhliYoibp8KnjA6og1gC8ic14jhfigfn2VR1jRYXNQ1P0rdcxA5ad_vUsiHDwSx305gi23hQ5_mLxA_fKY4mK9FRj9XtuB9tA8MU5fZVo_o7j3iDRwJHHKID' },
       { title: 'Euro Trip', date: 'Aug 2022', rating: 4, desc: 'Backpacking through Netherlands, Belgium, and Germany. Lots of beer and chocolate.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDM5WQ_HbJ95gpp-yhDIGmfb6lMH5XPGN1zZSpIVJ6e-5P9jcGCjwB07Ei6l4XGlmRo0EAFoe-ElInYeIpInHfhHT4TxfH3medXJ2duHNgMHpWUKLj0pfieJGluG77_6tTXH5vBKMclC34oZTwaNIoCrcdoOjwJGAkfXu9q2Yzsm3-wa738w1FPLEBP1lsP8NC1_Fmp0_FyaEJbL5yvf26O3hUPUd8jgveC--JFrlilDEJpATXQzfPVxbHxFgSEf2SQuDKL8TpAnGQe' }
     ];
-    // Combine saved trips (first) with default trips
-    setPastTrips([...savedTrips.map(trip => ({ 
-      title: trip.title, 
-      date: trip.date, 
-      rating: trip.rating || 4, 
-      desc: trip.desc || trip.description, 
-      img: trip.img 
+    setPastTrips([...savedTrips.map(trip => ({
+      title: trip.title,
+      date: trip.date,
+      rating: trip.rating || 4,
+      desc: trip.desc || trip.description,
+      img: trip.img
     })), ...defaultTrips]);
+
+    // Preplanned trips logic
+    const savedPreplanned = JSON.parse(localStorage.getItem('preplannedTrips') || '[]');
+    const defaultPreplanned = [
+      { title: 'Autumn in Kyoto', date: 'Nov 12 - Nov 20, 2024', status: 'Upcoming', tag: 'Relaxation', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAL9QM8G_T7MSeAndGFJKJ7A5Ev2iQ0eYUHVmu5Jsj5ZeutRL16fcyxnF6tz5VBUYF7ww6djCNttyzBXtYJz7dUQWddUEOuhV_G7R7llN0OY0AOyA3NZ6zeywJ8WhM9kkyH4uWKsJxhj1fkcJwZBnNIZ3USUn1VnZhBApQTuY8Dd1FFWV1yc0WUvJ5lr9z9QY2V-y7kfoMU1ZFGehOdrHegQKqv52jPDqTuguzZnB7Km-IiOt0BGyTA-mXxX0Eo2334wRcP3ooDWWUy' },
+      { title: 'Parisian Escape', date: 'May 05 - May 12, 2025', status: 'Draft', tag: 'Culture', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBzQW5NCrK70Ond-Ya9f4moJjchFI-4CsCo9CuAkhme0E0-4R9PkOXOf9R2-X81x5tAbo9vjVp6Bh6dobYBf2aVVIT5bhj8dWIh5uxvu_7OVo2uhe2XZ3PEvSQlJVB7soSdwuIaQwu7BDkfyOmVirGMswaXaS52zXU4LDQvZ4E3UWXZbFjRM5xlw3msFzRB-70YxDLfKR0JKxhS75ZmCGwv3ZJfHyJefCfY9oE-fvMEjMaR8vvOiqS_NIuSstmQXwDaGHkqSxEZOfke' },
+      { title: 'Italian Summer', date: 'Jul 10 - Jul 24, 2025', status: 'Upcoming', tag: 'Beach', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3k8icgMe-uEoMG-Cx8faGXmynXMd-Ii-zNrYjch6C7WG0BqBXpZpAwRJbVhZ_35FPKOZOvAFhRoTTjgcEr1xwQUju6wzL5aWAZAuST8gH1vQ75kVOkCudcq9zKfjQozkea3OlbBUzxz5ZUNnB-ZhA0oX4ggYIoNnpc2fRRI67wvAU7NUaf7Y3hMaIKT-4_qjNLejxCaObYo754eqP4zbVoE7JMyuC9ayEIbcvf2TLKnQRw9VmKmibgWA3WntgnuWIGPgGHZUuT01I' }
+    ];
+    // Avoid dups if loading from localstorage contains defaults
+    setPreplannedTrips(savedPreplanned.length > 0 ? savedPreplanned : defaultPreplanned);
   }, []);
+
+  const handleFetchPhotos = () => {
+    setIsLoadingPhotos(true);
+    // Simulate API call
+    setTimeout(() => {
+      const images = [
+        'https://lh3.googleusercontent.com/aida-public/AB6AXuD_yxvpc-SJEmfVPk5LeAhxxsvj2UkFUnBpLdg5d81B5ZaccPp_BLavsN6SJUyJABFTRf1EGzFbDwIoRtE4Dt20c1PSz0ZGMY9c-VD_dN1fHwOMbxRlGsyKpPS9GAnJXYvsXwfIyP7HA-yrVLKqZphWBg8H2_Ekd5zF_HmhI_dlNUbAz0ndnZmlsSIsap4G-_Hzc04BcFj32q-oQZrk32lqZOTVSRmlQ33MFTpxyZWjPzyBm38hmOheg4xgKc8JpGbXOZ0k9vonB1VR',
+        'https://lh3.googleusercontent.com/aida-public/AB6AXuDOZlD3RH9hQfMNbldykDbxA1h452fokRGjGQQyKWjlV1lJKFNldvwuLpw-kvLu70Xoi4pF-Jbt4AKtYtP6YKQUIy84wrRecwVoQLYSM_AmuPBjdmtYGry_GbsILz90Np9VPUmbdvWSSugxuDoNzM1cfoaRECzuyWtSWk4D9e9LHXrLnwMipBLjVhuiR7xJz6hNLBTnP37mP7lFjGQ7XO679LhULlKxGVIkokzvk3AK8B-g9n85p0TBrNQTnNWtRfY_jQiCB-vz43Kp'
+      ];
+      const randomConfig = images[Math.floor(Math.random() * images.length)];
+      setFormData(prev => ({ ...prev, img: randomConfig }));
+      setIsLoadingPhotos(false);
+    }, 1500);
+  };
+
+  const handleCreateTrip = (e) => {
+    e.preventDefault();
+    if (!formData.destination || !formData.startDate) {
+      alert("Please fill in destination and start date");
+      return;
+    }
+
+    const newTrip = {
+      title: formData.destination,
+      date: `${formData.startDate} - ${formData.endDate || 'TBD'}`,
+      status: 'Draft',
+      tag: 'New',
+      img: formData.img || 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3k8icgMe-uEoMG-Cx8faGXmynXMd-Ii-zNrYjch6C7WG0BqBXpZpAwRJbVhZ_35FPKOZOvAFhRoTTjgcEr1xwQUju6wzL5aWAZAuST8gH1vQ75kVOkCudcq9zKfjQozkea3OlbBUzxz5ZUNnB-ZhA0oX4ggYIoNnpc2fRRI67wvAU7NUaf7Y3hMaIKT-4_qjNLejxCaObYo754eqP4zbVoE7JMyuC9ayEIbcvf2TLKnQRw9VmKmibgWA3WntgnuWIGPgGHZUuT01I'
+    };
+
+    const updatedTrips = [...preplannedTrips, newTrip];
+    setPreplannedTrips(updatedTrips);
+    localStorage.setItem('preplannedTrips', JSON.stringify(updatedTrips));
+
+    setShowModal(false);
+    setFormData({ destination: '', startDate: '', endDate: '', img: '' });
+  };
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
@@ -81,11 +136,7 @@ const Profile = () => {
           </div>
         </div>
         <div className="flex overflow-x-auto gap-6 pb-6 no-scrollbar snap-x snap-mandatory">
-          {[
-            { title: 'Autumn in Kyoto', date: 'Nov 12 - Nov 20, 2024', status: 'Upcoming', tag: 'Relaxation', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAL9QM8G_T7MSeAndGFJKJ7A5Ev2iQ0eYUHVmu5Jsj5ZeutRL16fcyxnF6tz5VBUYF7ww6djCNttyzBXtYJz7dUQWddUEOuhV_G7R7llN0OY0AOyA3NZ6zeywJ8WhM9kkyH4uWKsJxhj1fkcJwZBnNIZ3USUn1VnZhBApQTuY8Dd1FFWV1yc0WUvJ5lr9z9QY2V-y7kfoMU1ZFGehOdrHegQKqv52jPDqTuguzZnB7Km-IiOt0BGyTA-mXxX0Eo2334wRcP3ooDWWUy' },
-            { title: 'Parisian Escape', date: 'May 05 - May 12, 2025', status: 'Draft', tag: 'Culture', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBzQW5NCrK70Ond-Ya9f4moJjchFI-4CsCo9CuAkhme0E0-4R9PkOXOf9R2-X81x5tAbo9vjVp6Bh6dobYBf2aVVIT5bhj8dWIh5uxvu_7OVo2uhe2XZ3PEvSQlJVB7soSdwuIaQwu7BDkfyOmVirGMswaXaS52zXU4LDQvZ4E3UWXZbFjRM5xlw3msFzRB-70YxDLfKR0JKxhS75ZmCGwv3ZJfHyJefCfY9oE-fvMEjMaR8vvOiqS_NIuSstmQXwDaGHkqSxEZOfke' },
-            { title: 'Italian Summer', date: 'Jul 10 - Jul 24, 2025', status: 'Upcoming', tag: 'Beach', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3k8icgMe-uEoMG-Cx8faGXmynXMd-Ii-zNrYjch6C7WG0BqBXpZpAwRJbVhZ_35FPKOZOvAFhRoTTjgcEr1xwQUju6wzL5aWAZAuST8gH1vQ75kVOkCudcq9zKfjQozkea3OlbBUzxz5ZUNnB-ZhA0oX4ggYIoNnpc2fRRI67wvAU7NUaf7Y3hMaIKT-4_qjNLejxCaObYo754eqP4zbVoE7JMyuC9ayEIbcvf2TLKnQRw9VmKmibgWA3WntgnuWIGPgGHZUuT01I' }
-          ].map((trip, idx) => (
+          {preplannedTrips.map((trip, idx) => (
             <div key={idx} className="snap-start shrink-0 w-80 bg-card-light dark:bg-card-dark rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-800">
               <div className="h-48 relative">
                 <img alt={trip.title} className="w-full h-full object-cover" src={trip.img} />
@@ -106,7 +157,10 @@ const Profile = () => {
               </div>
             </div>
           ))}
-          <div className="snap-start shrink-0 w-80 bg-gray-50 dark:bg-gray-800/50 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center justify-center p-6 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer group">
+          <div
+            onClick={() => setShowModal(true)}
+            className="snap-start shrink-0 w-80 bg-gray-50 dark:bg-gray-800/50 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center justify-center p-6 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer group"
+          >
             <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <span className="material-icons-outlined text-gray-400 dark:text-gray-500 text-3xl">add</span>
             </div>
@@ -153,9 +207,91 @@ const Profile = () => {
           ))}
         </div>
       </section>
+
+      {/* New Trip Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-fadeIn">
+            <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Plan a New Trip</h3>
+              <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                <span className="material-icons-outlined">close</span>
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Destination</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Where to?"
+                    className="flex-1 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:ring-primary focus:border-primary"
+                    value={formData.destination}
+                    onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
+                  />
+                  <button
+                    onClick={handleFetchPhotos}
+                    disabled={isLoadingPhotos}
+                    className="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center gap-1"
+                  >
+                    {isLoadingPhotos ? (
+                      <span className="material-icons-outlined animate-spin">refresh</span>
+                    ) : (
+                      <span className="material-icons-outlined">image_search</span>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {formData.img && (
+                <div className="relative h-40 rounded-lg overflow-hidden">
+                  <img src={formData.img} alt="Preview" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                    <span className="text-white text-sm font-medium bg-black/50 px-2 py-1 rounded">Photo Selected</span>
+                  </div>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Start Date</label>
+                  <input
+                    type="date"
+                    className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:ring-primary focus:border-primary"
+                    value={formData.startDate}
+                    onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">End Date</label>
+                  <input
+                    type="date"
+                    className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:ring-primary focus:border-primary"
+                    value={formData.endDate}
+                    onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 flex justify-end gap-3">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateTrip}
+                className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors font-medium shadow-sm"
+              >
+                Create Trip
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 };
 
 export default Profile;
-

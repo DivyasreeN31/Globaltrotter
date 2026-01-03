@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GlobalTrotter - Community Tab</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#6366f1", // Indigo 500 - a vibrant primary
+              "background-light": "#f3f4f6", // Gray 100
+              "background-dark": "#111827", // Gray 900
+              "surface-light": "#ffffff",
+              "surface-dark": "#1f2937", // Gray 800
+              "border-light": "#e5e7eb", // Gray 200
+              "border-dark": "#374151", // Gray 700
+              "text-main-light": "#111827",
+              "text-main-dark": "#f9fafb",
+              "text-muted-light": "#6b7280",
+              "text-muted-dark": "#9ca3af",
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+              body: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              'xl': "0.75rem",
+              '2xl': "1rem",
+            },
+          },
+        },
+      };
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-body text-text-main-light dark:text-text-main-dark transition-colors duration-200 min-h-screen flex flex-col">
+<nav class="bg-surface-light dark:bg-surface-dark border-b border-border-light dark:border-border-dark sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-16">
+<div class="flex items-center">
+<div class="flex-shrink-0 flex items-center gap-2">
+<span class="material-icons-outlined text-primary text-3xl">public</span>
+<span class="text-2xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark">GlobalTrotter</span>
+</div>
+<div class="hidden md:block ml-10">
+<div class="flex items-baseline space-x-4">
+<a class="text-text-muted-light hover:text-primary dark:text-text-muted-dark dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-text-muted-light hover:text-primary dark:text-text-muted-dark dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors" href="#">My Trips</a>
+<a class="text-text-muted-light hover:text-primary dark:text-text-muted-dark dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors" href="#">Explore</a>
+<a class="bg-indigo-50 dark:bg-indigo-900/30 text-primary px-3 py-2 rounded-md text-sm font-medium" href="#">Community</a>
+<a class="text-text-muted-light hover:text-primary dark:text-text-muted-dark dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors" href="#">Settings</a>
+</div>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-text-muted-light dark:text-text-muted-dark transition-colors relative">
+<span class="material-icons-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-gray-800"></span>
+</button>
+<div class="h-10 w-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold shadow-md cursor-pointer hover:ring-2 hover:ring-offset-2 hover:ring-primary dark:ring-offset-background-dark transition-all">
+          JD
+        </div>
+</div>
+</div>
+</div>
+</nav>
+<main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex gap-8">
+<div class="flex-grow w-full lg:w-3/4 space-y-6">
+<div class="bg-surface-light dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-border-light dark:border-border-dark flex flex-col sm:flex-row gap-4 items-center justify-between">
+<div class="relative w-full sm:max-w-md">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons-outlined text-text-muted-light dark:text-text-muted-dark">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-2 border border-border-light dark:border-border-dark rounded-lg leading-5 bg-background-light dark:bg-gray-700 text-text-main-light dark:text-text-main-dark placeholder-text-muted-light dark:placeholder-text-muted-dark focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-colors" placeholder="Search experiences, trips..." type="text"/>
+</div>
+<div class="flex gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+<button class="flex items-center px-4 py-2 border border-border-light dark:border-border-dark rounded-lg text-sm font-medium text-text-muted-light dark:text-text-muted-dark bg-surface-light dark:bg-surface-dark hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors whitespace-nowrap">
+<span class="material-icons-outlined text-base mr-2">view_agenda</span>
+                        Group by
+                    </button>
+<button class="flex items-center px-4 py-2 border border-border-light dark:border-border-dark rounded-lg text-sm font-medium text-text-muted-light dark:text-text-muted-dark bg-surface-light dark:bg-surface-dark hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors whitespace-nowrap">
+<span class="material-icons-outlined text-base mr-2">filter_list</span>
+                        Filter
+                    </button>
+<button class="flex items-center px-4 py-2 border border-border-light dark:border-border-dark rounded-lg text-sm font-medium text-text-muted-light dark:text-text-muted-dark bg-surface-light dark:bg-surface-dark hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors whitespace-nowrap">
+<span class="material-icons-outlined text-base mr-2">sort</span>
+                        Sort by...
+                    </button>
+</div>
+</div>
+<div class="flex items-center justify-between mb-2">
+<h2 class="text-xl font-bold text-text-main-light dark:text-text-main-dark flex items-center gap-2">
+<span class="material-icons-outlined text-primary">diversity_3</span>
+                    Community Feed
+                </h2>
+<button class="hidden sm:flex items-center text-sm text-primary font-medium hover:text-indigo-600 transition-colors">
+                    Share your story
+                    <span class="material-icons-outlined text-base ml-1">edit</span>
+</button>
+</div>
+<article class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-6 transition-transform hover:scale-[1.01] duration-200">
+<div class="flex gap-4">
+<div class="flex-shrink-0">
+<img alt="User avatar" class="h-12 w-12 rounded-full object-cover border-2 border-white dark:border-gray-600 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-O7APKyYdplwuyxI7pFW8BipHU1XgI8zVXdR4RHgI4DIaWgyHyXNyr_21U64ZUPMN307RjdfvxEg_2YPwVpRsDdbcLEQNgJy-j9MT7ZO6BiYcDjJJz3SYIwOcG5RAipyY7FwIHit5fePFyNjZVamNP5bVTO1AS1O3cH1jJzbTCIr_JM219rdw4V3XmHGCzuDlHELYmWC0N2t89gCvWYeuaiUL0VsGCUz5kbwgnZBfLIgMIYGIXJVcZWlDnZQTZD6clWgBPy-vP5YD"/>
+</div>
+<div class="flex-grow space-y-2">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-base font-semibold text-text-main-light dark:text-text-main-dark">Sarah Jenkins</h3>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark">2 hours ago • Paris, France</p>
+</div>
+<button class="text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors">
+<span class="material-icons-outlined">more_horiz</span>
+</button>
+</div>
+<p class="text-text-main-light dark:text-text-gray-300 text-sm leading-relaxed">
+                            Just got back from an amazing 5-day trip to Paris! The Eiffel Tower at sunset is absolutely breathtaking. Highly recommend grabbing a crepe near the Trocadéro gardens. Here are some of my favorite shots! 🥐🗼
+                        </p>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-3 rounded-lg overflow-hidden">
+<img alt="Eiffel Tower" class="h-32 w-full object-cover hover:opacity-90 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB89ieirM4uI72FoIRhfglnjsikgmodQtHcwrkpthOv_0wcccg7LqxnMi5v5-EzGHO1qyg8j47OY8PS4y9dMj7jk_y1o7iJYkdAMrOOAQB7FUEa3n-RZsA8QX-rz_GurqIBuF2QKieDIkL5y5YCGvcmMdrxClymAqwT91ykQjMwY8hVDRXjWZytyqG6hJqJX_NDtdfP_DJEMfj-LrCbnnSxlMokUwUkB2EOH4iTM5eE76nBehgaSZTjShDFgCTc5Xcrp7Lzi5KquEbx"/>
+<img alt="Paris Street" class="h-32 w-full object-cover hover:opacity-90 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd0B3A2nMoZuDZOc_2QQJTh4gbyIYm8MOQZfxnnHcPguuNwwnEVmFY4GQAt-YFV86AQajJuw5zsJpwZtt5S_w_DAs5aVXKKSOzyCLPh-G2o47teM3ywkr-r-ha9UWUeDoNmcT-vjE816d1Kkep9pMquAVW-dzhPgR3O01YE8TJKq0-v7OAUCrSL_A3Xk8SVlv2oMouxdz8KLUk754rgoHroULfiovMR1I4P6d63bM9raWk5gw3eppUgukKwxKFetMB4MNqf9S31iVn"/>
+<img alt="French Pastries" class="h-32 w-full object-cover hidden sm:block hover:opacity-90 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClsMG4qFz0bX4N2lvVg0NuBo5wrHeA6maqTExbgMmmicfmiXHH1MTuiR9vg8xxFurxPSVkFgAnfoLUTE2WnsxSO82Ox6g5UVw93Mv-5mxmBumTN_IiITWx9Hl9D7Wlry_cHebc48qg0LuQkoedm4oUu4D2suaLQPMxHs7YO8gtwyrpJCVF6EhC5EBfDVbCbsAjzhsj1jHinS72DFaL7y7FdWi2sNQ7GmXDpWh_lBP8__YIkwnz-c8HLFYgg22ZbytmRFvo1yVfYEzY"/>
+</div>
+<div class="flex items-center gap-6 mt-4 pt-3 border-t border-border-light dark:border-gray-700">
+<button class="flex items-center gap-1.5 text-sm text-text-muted-light dark:text-text-muted-dark hover:text-rose-500 dark:hover:text-rose-400 transition-colors group">
+<span class="material-icons-outlined group-hover:text-rose-500 dark:group-hover:text-rose-400 transition-colors">favorite_border</span>
+                                243
+                            </button>
+<button class="flex items-center gap-1.5 text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors group">
+<span class="material-icons-outlined group-hover:text-primary transition-colors">chat_bubble_outline</span>
+                                18
+                            </button>
+<button class="flex items-center gap-1.5 text-sm text-text-muted-light dark:text-text-muted-dark hover:text-green-500 transition-colors group ml-auto">
+<span class="material-icons-outlined group-hover:text-green-500 transition-colors">share</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+<article class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-6 transition-transform hover:scale-[1.01] duration-200">
+<div class="flex gap-4">
+<div class="flex-shrink-0">
+<img alt="User avatar" class="h-12 w-12 rounded-full object-cover border-2 border-white dark:border-gray-600 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvJua4AwibdNOLH_CARnvoxrj8smbAxSDTXF-pmV_sTEp768Y9tkfs0OpNrhVf9VjCA8xC79UQ51HN8xlkOgmbBtwD05Vqcamb_tYOBdJ_dFbmvewV1n7CEXKVQtLie3ddioJp9DJ5Jf90XBOcPkI645oZvTaEJUh_HbCW5BRnd8y5IXWhrmcZw6nMy63qxgzjNAGzgTJB-wGazL8-sGB6Ndh1bcsJLWJZAbC6MWraI5r4ZOzdJkGX9IOrFnIXBAHkvzJfFtaT75OV"/>
+</div>
+<div class="flex-grow space-y-2">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-base font-semibold text-text-main-light dark:text-text-main-dark">Michael Chen</h3>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark">5 hours ago • Kyoto, Japan</p>
+</div>
+<button class="text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors">
+<span class="material-icons-outlined">more_horiz</span>
+</button>
+</div>
+<p class="text-text-main-light dark:text-text-gray-300 text-sm leading-relaxed">
+                            Kyoto in autumn is pure magic. The colors of the leaves at Kinkaku-ji are unlike anything I've ever seen. Pro tip: Get there early (around 7 AM) to beat the crowds! 🍁🏯
+                        </p>
+<div class="bg-background-light dark:bg-gray-800 p-3 rounded-lg border border-border-light dark:border-border-dark mt-2 flex items-center gap-3">
+<div class="h-10 w-10 rounded bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center justify-center">
+<span class="material-icons-outlined">map</span>
+</div>
+<div class="flex-grow">
+<h4 class="text-sm font-medium text-text-main-light dark:text-text-main-dark">Kyoto 3-Day Itinerary</h4>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark">Shared by Michael Chen</p>
+</div>
+<button class="text-primary text-sm font-medium hover:underline">View</button>
+</div>
+<div class="flex items-center gap-6 mt-4 pt-3 border-t border-border-light dark:border-gray-700">
+<button class="flex items-center gap-1.5 text-sm text-text-muted-light dark:text-text-muted-dark hover:text-rose-500 dark:hover:text-rose-400 transition-colors group">
+<span class="material-icons-outlined group-hover:text-rose-500 dark:group-hover:text-rose-400 transition-colors">favorite_border</span>
+                                156
+                            </button>
+<button class="flex items-center gap-1.5 text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors group">
+<span class="material-icons-outlined group-hover:text-primary transition-colors">chat_bubble_outline</span>
+                                32
+                            </button>
+<button class="flex items-center gap-1.5 text-sm text-text-muted-light dark:text-text-muted-dark hover:text-green-500 transition-colors group ml-auto">
+<span class="material-icons-outlined group-hover:text-green-500 transition-colors">share</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+<article class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-6 transition-transform hover:scale-[1.01] duration-200">
+<div class="flex gap-4">
+<div class="flex-shrink-0">
+<img alt="User avatar" class="h-12 w-12 rounded-full object-cover border-2 border-white dark:border-gray-600 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTUK4KMWjpmH5gnnxr_TAG_YbX6NZ-idGmlHLzxA2-0-oxcnBxln9cW5g-XxzFlrXfJFzfVnfZwkeXstfka6l--dBcTsnQ-SKHM4lNbhdCOjL7H8PiRitIxxung88elGn7M12i-7SmNGuakEGceT2RMvt3pXSVC7eMRu3OmimdQqYXRRc4zp2vWaLhvuUWoq-f_i1WJF9yHLMA4cKzcAf6hRd5NA1vB-PK7a5HTjqd42JB-I5apXnCn9MivIXKdxAYGpEpcBCBFg6m"/>
+</div>
+<div class="flex-grow space-y-2">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-base font-semibold text-text-main-light dark:text-text-main-dark">David Ross</h3>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark">1 day ago • Cusco, Peru</p>
+</div>
+<button class="text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors">
+<span class="material-icons-outlined">more_horiz</span>
+</button>
+</div>
+<p class="text-text-main-light dark:text-text-gray-300 text-sm leading-relaxed">
+                           Finally made it to Machu Picchu! The hike was tough but absolutely worth every step. The altitude is no joke though, make sure to acclimate in Cusco for a few days first.
+                        </p>
+<div class="w-full h-48 rounded-lg overflow-hidden mt-2 relative group cursor-pointer">
+<img alt="Machu Picchu" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDX0YOjp6vaYSj9kwOQy9Y4mGhf7Sr4Re3dEAt2kOq8z5-o6vLWuB3a6FXF9a4Pm8i9BKzlSK2ixboqaLXmX4jMYGUwaokJyYSHmoKClLVCoiAxqeBdaoKCG2450cVP7a9L1JiiEH2Wk9EtxiX0ItsXwbTRXnaxUQKMr6ANUEjQBOqeoTSzzf0U2SMfTAZ4nql-f8Bwwt6ZkyABK5dWEhjAh82ZHxJPXOleQTmzW0sNdn6_PvRHWHzC23iZ9vJtzc483MnciZCBv0op"/>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+</div>
+<div class="flex items-center gap-6 mt-4 pt-3 border-t border-border-light dark:border-gray-700">
+<button class="flex items-center gap-1.5 text-sm text-text-muted-light dark:text-text-muted-dark hover:text-rose-500 dark:hover:text-rose-400 transition-colors group">
+<span class="material-icons-outlined group-hover:text-rose-500 dark:group-hover:text-rose-400 transition-colors">favorite_border</span>
+                                892
+                            </button>
+<button class="flex items-center gap-1.5 text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors group">
+<span class="material-icons-outlined group-hover:text-primary transition-colors">chat_bubble_outline</span>
+                                145
+                            </button>
+<button class="flex items-center gap-1.5 text-sm text-text-muted-light dark:text-text-muted-dark hover:text-green-500 transition-colors group ml-auto">
+<span class="material-icons-outlined group-hover:text-green-500 transition-colors">share</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+</div>
+<aside class="hidden lg:block w-1/4 space-y-6">
+<div class="bg-indigo-50 dark:bg-gray-800 rounded-xl p-5 border border-indigo-100 dark:border-gray-700">
+<div class="flex items-start gap-3">
+<span class="material-icons-outlined text-primary mt-0.5">info</span>
+<p class="text-xs text-text-muted-light dark:text-gray-300 leading-relaxed">
+                        Community section where all users can share their experience about a certain trip or activity. Use the search and filters to narrow down results.
+                    </p>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-5">
+<h3 class="font-bold text-text-main-light dark:text-text-main-dark mb-4 flex items-center gap-2">
+<span class="material-icons-outlined text-rose-500">local_fire_department</span>
+                    Trending Topics
+                </h3>
+<ul class="space-y-4">
+<li class="group cursor-pointer">
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm font-medium text-text-main-light dark:text-text-main-dark group-hover:text-primary transition-colors">#SummerInItaly</span>
+<span class="text-xs text-text-muted-light dark:text-text-muted-dark bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">New</span>
+</div>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark">12.5k posts</p>
+</li>
+<li class="group cursor-pointer">
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm font-medium text-text-main-light dark:text-text-main-dark group-hover:text-primary transition-colors">#SoloTravel</span>
+</div>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark">8.2k posts</p>
+</li>
+<li class="group cursor-pointer">
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm font-medium text-text-main-light dark:text-text-main-dark group-hover:text-primary transition-colors">#HiddenGems</span>
+</div>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark">5.1k posts</p>
+</li>
+<li class="group cursor-pointer">
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm font-medium text-text-main-light dark:text-text-main-dark group-hover:text-primary transition-colors">#BudgetTrips</span>
+</div>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark">3.9k posts</p>
+</li>
+</ul>
+<button class="w-full mt-4 text-sm text-primary font-medium hover:underline text-left">Show more</button>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-5">
+<h3 class="font-bold text-text-main-light dark:text-text-main-dark mb-4 flex items-center gap-2">
+<span class="material-icons-outlined text-yellow-500">stars</span>
+                    Top Travelers
+                </h3>
+<ul class="space-y-4">
+<li class="flex items-center gap-3 group cursor-pointer">
+<img alt="User" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_BqeDHTpR1gtz-Ygl0j6rELyHRFb63i-3E19UAuF-fZju_3cDd1Y6RITy2gxzN-EWObLWNHRHOz8FsmMyxUuz4Gnzs2-_8Rl_FBv7Wjd5ijCUwpA2M1zBzw16s6817aTXPB0oalvpL0I0hHDja8XicEU6YgEFrHZlhzTdxK95V8gBNuo7MbKQQu4wlMRdTIfzE2emYo1s27K_jsxgYNmo0mXvZ7i3PYwZyUJ43cujGad0fAp_rPukquKBhWsTG25Et5DtTPH8mEMv"/>
+<div class="flex-grow">
+<h4 class="text-sm font-medium text-text-main-light dark:text-text-main-dark group-hover:text-primary">Alex Johnson</h4>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark">45 countries visited</p>
+</div>
+<button class="text-primary hover:bg-indigo-50 dark:hover:bg-indigo-900/30 p-1.5 rounded-full transition-colors">
+<span class="material-icons-outlined text-sm">person_add</span>
+</button>
+</li>
+<li class="flex items-center gap-3 group cursor-pointer">
+<img alt="User" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYg-BAipwuDvENDlIwY8c7wH_4AAuiHWIFXudQmcQB8kFwHGlZUdtZhzmFTh9RQ2bGlvyLHCMRT0LHOflp2cJHxFBL98VRzoLCmDXJvqttvMxdimcD2v4TtqmOLCO9VcgBxEjw1m1xUyLTtMaawuE_P35wcPxV3G_5jrylD36j3d_NuDGV7yGZZ7L-IUxiVB0YvOFlmQaAkZW9tgasjuoAH3EHu6ODl7Vb0RfnbZTM6CGgohDlzQM-rTEXgvT9fuBbxnDUwti0dPsu"/>
+<div class="flex-grow">
+<h4 class="text-sm font-medium text-text-main-light dark:text-text-main-dark group-hover:text-primary">Maria Garcia</h4>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark">Adventure Expert</p>
+</div>
+<button class="text-primary hover:bg-indigo-50 dark:hover:bg-indigo-900/30 p-1.5 rounded-full transition-colors">
+<span class="material-icons-outlined text-sm">person_add</span>
+</button>
+</li>
+<li class="flex items-center gap-3 group cursor-pointer">
+<img alt="User" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqNwnd7qOmMZojjvTK7mcyzdJhc-KmAZwhoF7bQrTQvGB3mZt66C_foAriQZOLVZwTVXO8D-yYQ56k6v8ieKpSkdJx9N9_QEeApfJqoymcwX2_IuodpkL3ydy8LbLLmrw_J7EdJmP4CjN9GEUrRFOSioU26GFOWfYF9hXXCJELYhnrvf0XJmR7NzhmR6o8XRhHnPY98hBc0BtkJzb0MjmX5XruYoy0Z3RUsUADNyT0d4tEVIER0Rykt-ZDT44nr-MhagAzs9DndMvo"/>
+<div class="flex-grow">
+<h4 class="text-sm font-medium text-text-main-light dark:text-text-main-dark group-hover:text-primary">Lisa Wong</h4>
+<p class="text-xs text-text-muted-light dark:text-text-muted-dark">Foodie Traveler</p>
+</div>
+<button class="text-primary hover:bg-indigo-50 dark:hover:bg-indigo-900/30 p-1.5 rounded-full transition-colors">
+<span class="material-icons-outlined text-sm">person_add</span>
+</button>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+<div class="fixed bottom-6 right-6 lg:hidden">
+<button class="bg-primary text-white p-4 rounded-full shadow-lg hover:bg-indigo-600 transition-colors flex items-center justify-center">
+<span class="material-icons-outlined">edit</span>
+</button>
+</div>
+<footer class="bg-surface-light dark:bg-surface-dark border-t border-border-light dark:border-border-dark mt-auto">
+<div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="material-icons-outlined text-primary">public</span>
+<span class="font-bold text-text-main-light dark:text-text-main-dark">GlobalTrotter</span>
+</div>
+<div class="flex gap-6 text-sm text-text-muted-light dark:text-text-muted-dark">
+<a class="hover:text-primary transition-colors" href="#">About</a>
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<div class="text-sm text-text-muted-light dark:text-text-muted-dark">
+        © 2024 GlobalTrotter Inc. All rights reserved.
+      </div>
+</div>
+</div>
+</footer>
+<script>
+        // Simple dark mode toggler for demonstration purposes
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+</body></html>

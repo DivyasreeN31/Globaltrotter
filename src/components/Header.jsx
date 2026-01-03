@@ -1,53 +1,10 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { auth } from '../firebase/config';
+import { useAuth } from '../contexts/AuthContext';
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userPhoto, setUserPhoto] = useState('');
-
-  useEffect(() => {
-    // Listen to Firebase auth state changes
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsAuthenticated(true);
-        setUserPhoto(user.photoURL || localStorage.getItem('userPhoto') || '');
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('userEmail', user.email || '');
-        localStorage.setItem('userName', user.displayName || '');
-        if (user.photoURL) {
-          localStorage.setItem('userPhoto', user.photoURL);
-        }
-      } else {
-        setIsAuthenticated(false);
-        localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('userEmail');
-        localStorage.removeItem('userName');
-        localStorage.removeItem('userPhoto');
-      }
-    });
-
-    // Also check localStorage for immediate UI update
-    const checkAuth = () => {
-      const authStatus = localStorage.getItem('isAuthenticated') === 'true';
-      setIsAuthenticated(authStatus);
-      if (authStatus) {
-        setUserPhoto(localStorage.getItem('userPhoto') || '');
-      }
-    };
-    checkAuth();
-
-    // Listen for custom auth change event
-    window.addEventListener('authChange', checkAuth);
-
-    return () => {
-      unsubscribe();
-      window.removeEventListener('authChange', checkAuth);
-    };
-  }, [location]);
+  const { user, isAuthenticated, logout } = useAuth();
 
   const isActive = (path) => {
     return location.pathname === path;
@@ -55,24 +12,10 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userPhoto');
-      setIsAuthenticated(false);
-      setUserPhoto('');
-      window.dispatchEvent(new Event('authChange'));
+      await logout();
       navigate('/login');
     } catch (error) {
       console.error('Error signing out:', error);
-      // Still clear local storage and navigate even if Firebase signOut fails
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userPhoto');
-      setIsAuthenticated(false);
-      navigate('/login');
     }
   };
 
@@ -94,8 +37,8 @@ const Header = () => {
                 <Link
                   to="/trips"
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/trips')
-                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
+                    ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
                     }`}
                 >
                   My Trips
@@ -103,44 +46,26 @@ const Header = () => {
                 <Link
                   to="/explore"
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/explore')
-                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
+                    ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
                     }`}
                 >
                   Explore
                 </Link>
                 <Link
-                  to="/itinerary"
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/itinerary')
-                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
-                    }`}
-                >
-                  Itinerary
-                </Link>
-                <Link
                   to="/community"
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/community')
-                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
+                    ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
                     }`}
                 >
                   Community
                 </Link>
                 <Link
-                  to="/budget"
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/budget')
-                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
-                    }`}
-                >
-                  Budget
-                </Link>
-                <Link
                   to="/"
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/')
-                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
+                    ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
                     }`}
                 >
                   Dashboard
@@ -148,8 +73,8 @@ const Header = () => {
                 <Link
                   to="/profile"
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/profile')
-                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
+                    ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
                     }`}
                 >
                   Profile
@@ -162,11 +87,11 @@ const Header = () => {
               <>
                 <div className="flex items-center gap-3">
                   <div className="h-9 w-9 rounded-full bg-gray-300 dark:bg-gray-600 overflow-hidden ring-2 ring-primary ring-offset-2 ring-offset-background-light dark:ring-offset-background-dark cursor-pointer transition hover:opacity-90">
-                    {userPhoto ? (
-                      <img alt="User Avatar" className="h-full w-full object-cover" src={userPhoto} />
+                    {user?.photoURL ? (
+                      <img alt="User Avatar" className="h-full w-full object-cover" src={user.photoURL} />
                     ) : (
                       <div className="h-full w-full flex items-center justify-center text-white font-semibold text-sm">
-                        {localStorage.getItem('userName')?.charAt(0).toUpperCase() || 'U'}
+                        {user?.displayName?.charAt(0).toUpperCase() || 'U'}
                       </div>
                     )}
                   </div>
@@ -197,4 +122,3 @@ const Header = () => {
 };
 
 export default Header;
-

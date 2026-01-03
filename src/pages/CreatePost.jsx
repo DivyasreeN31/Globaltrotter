@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/ui/Button';
+import { db, auth } from '../firebase/config';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const CreatePost = () => {
     const navigate = useNavigate();
@@ -12,25 +14,33 @@ const CreatePost = () => {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!auth.currentUser) {
+            alert("You must be logged in to post");
+            return;
+        }
         setIsSubmitting(true);
 
-        // Simulate API call
-        setTimeout(() => {
-            const posts = JSON.parse(localStorage.getItem('community_posts') || '[]');
-            const newPost = {
-                ...postData,
-                id: Date.now(),
-                time: 'Just now',
-                likes: 0,
+        try {
+            await addDoc(collection(db, 'community_posts'), {
+                userId: auth.currentUser.uid,
+                name: auth.currentUser.displayName || 'Anonymous',
+                avatar: auth.currentUser.photoURL || 'https://lh3.googleusercontent.com/aida-public/AB6AXuD-O7APKyYdplwuyxI7pFW8BipHU1XgI8zVXdR4RHgI4DIaWgyHyXNyr_21U64ZUPMN307RjdfvxEg_2YPwVpRsDdbcLEQNgJy-j9MT7ZO6BiYcDjJJz3SYIwOcG5RAipyY7FwIHit5fePFyNjZVamNP5bVTO1AS1O3cH1jJzbTCIr_JM219rdw4V3XmHGCzuDlHELYmWC0N2t89gCvWYeuaiUL0VsGCUz5kbwgnZBfLIgMIYGIXJVcZWlDnZQTZD6clWgBPy-vP5YD',
+                location: postData.location,
+                content: postData.content,
+                images: postData.images,
+                likes: [],
                 comments: 0,
-                avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD-O7APKyYdplwuyxI7pFW8BipHU1XgI8zVXdR4RHgI4DIaWgyHyXNyr_21U64ZUPMN307RjdfvxEg_2YPwVpRsDdbcLEQNgJy-j9MT7ZO6BiYcDjJJz3SYIwOcG5RAipyY7FwIHit5fePFyNjZVamNP5bVTO1AS1O3cH1jJzbTCIr_JM219rdw4V3XmHGCzuDlHELYmWC0N2t89gCvWYeuaiUL0VsGCUz5kbwgnZBfLIgMIYGIXJVcZWlDnZQTZD6clWgBPy-vP5YD'
-            };
-            localStorage.setItem('community_posts', JSON.stringify([newPost, ...posts]));
+                timestamp: serverTimestamp()
+            });
             setIsSubmitting(false);
             navigate('/community');
-        }, 1500);
+        } catch (error) {
+            console.error("Error adding document: ", error);
+            alert("Failed to create post. Please try again.");
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (e) => {

@@ -1,18 +1,28 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { db, auth } from '../firebase/config';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const NewTrip = () => {
   const navigate = useNavigate();
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!destination || !startDate || !endDate) {
       alert('Please fill in all fields');
       return;
     }
+
+    if (!auth.currentUser) {
+      alert('You must be logged in to create a trip');
+      return;
+    }
+
+    setIsSubmitting(true);
 
     const images = [
       "https://lh3.googleusercontent.com/aida-public/AB6AXuD_yxvpc-SJEmfVPk5LeAhxxsvj2UkFUnBpLdg5d81B5ZaccPp_BLavsN6SJUyJABFTRf1EGzFbDwIoRtE4Dt20c1PSz0ZGMY9c-VD_dN1fHwOMbxRlGsyKpPS9GAnJXYvsXwfIyP7HA-yrVLKqZphWBg8H2_Ekd5zF_HmhI_dlNUbAz0ndnZmlsSIsap4G-_Hzc04BcFj32q-oQZrk32lqZOTVSRmlQ33MFTpxyZWjPzyBm38hmOheg4xgKc8JpGbXOZ0k9vonB1VR",
@@ -22,20 +32,23 @@ const NewTrip = () => {
     ];
     const randomImage = images[Math.floor(Math.random() * images.length)];
 
-    const newTrip = {
-      id: Date.now().toString(),
-      destination,
-      startDate,
-      endDate,
-      image: randomImage,
-      status: 'planned'
-    };
-
-    const existingTrips = JSON.parse(localStorage.getItem('globaltrotter_trips') || '[]');
-    existingTrips.unshift(newTrip);
-    localStorage.setItem('globaltrotter_trips', JSON.stringify(existingTrips));
-
-    navigate('/trips');
+    try {
+      await addDoc(collection(db, 'trips'), {
+        userId: auth.currentUser.uid,
+        destination,
+        startDate,
+        endDate,
+        image: randomImage,
+        status: 'planned',
+        createdAt: serverTimestamp()
+      });
+      setIsSubmitting(false);
+      navigate('/trips');
+    } catch (error) {
+      console.error("Error creating trip: ", error);
+      alert("Failed to create trip. Please try again.");
+      setIsSubmitting(false);
+    }
   };
   return (
     <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
@@ -114,12 +127,23 @@ const NewTrip = () => {
                 />
               </div>
             </div>
+            <div className="sm:col-span-6 mt-6 flex justify-end gap-3 border-t border-border-light dark:border-border-dark pt-6">
+              <button
+                type="button"
+                onClick={() => navigate('/trips')}
+                className="inline-flex justify-center py-2 px-6 border border-border-light dark:border-border-dark shadow-sm text-sm font-medium rounded-md text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                disabled={isSubmitting}
+                className="inline-flex justify-center py-2 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                type="submit"
+              >
+                {isSubmitting ? 'Creating...' : 'Start Planning'}
+              </button>
+            </div>
           </form>
-        </div>
-        <div className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 text-right sm:px-6 border-t border-border-light dark:border-border-dark">
-          <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors" type="submit">
-            Start Planning
-          </button>
         </div>
       </div>
 

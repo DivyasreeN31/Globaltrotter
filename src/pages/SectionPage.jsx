@@ -1,51 +1,81 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Button from '../components/ui/Button';
+import { db, auth } from '../firebase/config';
+import { doc, getDoc, setDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const SectionPage = () => {
-  const { sectionId } = useParams();
+  const { tripId, sectionId } = useParams();
   const navigate = useNavigate();
   const [section, setSection] = useState({
-    id: sectionId,
     title: '',
     content: '',
     budget: '',
-    dateRange: '',
-    createdAt: new Date().toISOString()
+    dateRange: ''
   });
   const [isEditing, setIsEditing] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const savedSections = JSON.parse(localStorage.getItem('itinerary-sections') || '[]');
-    const currentSection = savedSections.find(s => s.id === sectionId);
-    if (currentSection) {
-      setSection(currentSection);
-      setIsEditing(false);
-    }
-  }, [sectionId]);
+    const fetchSection = async () => {
+      if (sectionId.startsWith('new-')) {
+        setLoading(false);
+        return;
+      }
 
-  const handleSave = () => {
-    const savedSections = JSON.parse(localStorage.getItem('itinerary-sections') || '[]');
-    const index = savedSections.findIndex(s => s.id === sectionId);
+      try {
+        const docRef = doc(db, 'itinerary_sections', sectionId);
+        const docSnap = await getDoc(docRef);
 
-    const sectionToSave = {
-      ...section,
-      icon: 'local_activity',
-      iconBg: 'bg-orange-100 dark:bg-orange-900/30',
-      iconColor: 'text-orange-600 dark:text-orange-400',
+        if (docSnap.exists()) {
+          setSection(docSnap.data());
+          setIsEditing(false);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching section:", error);
+        setLoading(false);
+      }
     };
 
-    if (index > -1) {
-      savedSections[index] = sectionToSave;
-    } else {
-      savedSections.push(sectionToSave);
-    }
+    fetchSection();
+  }, [sectionId]);
 
-    localStorage.setItem('itinerary-sections', JSON.stringify(savedSections));
-    setIsEditing(false);
-    setTimeout(() => {
-      navigate('/itinerary');
-    }, 1500);
+  const handleSave = async () => {
+    if (!auth.currentUser) return;
+    setIsSubmitting(true);
+
+    const sectionData = {
+      ...section,
+      tripId: tripId,
+      userId: auth.currentUser.uid,
+      icon: section.icon || 'local_activity',
+      iconBg: section.iconBg || 'bg-orange-100 dark:bg-orange-900/30',
+      iconColor: section.iconColor || 'text-orange-600 dark:text-orange-400',
+      updatedAt: serverTimestamp()
+    };
+
+    try {
+      if (sectionId.startsWith('new-')) {
+        await addDoc(collection(db, 'itinerary_sections'), {
+          ...sectionData,
+          createdAt: serverTimestamp()
+        });
+      } else {
+        await setDoc(doc(db, 'itinerary_sections', sectionId), sectionData, { merge: true });
+      }
+
+      setIsEditing(false);
+      setTimeout(() => {
+        navigate(`/itinerary/${tripId}`);
+      }, 1500);
+    } catch (error) {
+      console.error("Error saving section:", error);
+      alert("Failed to save section");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -70,16 +100,17 @@ const SectionPage = () => {
             <>
               <Button
                 variant="outline"
-                onClick={() => navigate('/itinerary')}
+                onClick={() => navigate(`/itinerary/${tripId}`)}
                 className="px-6"
               >
                 Cancel
               </Button>
               <Button
                 onClick={handleSave}
+                disabled={isSubmitting}
                 className="bg-primary hover:bg-primary-hover text-white px-6"
               >
-                Save & Update
+                {isSubmitting ? 'Saving...' : 'Save & Update'}
               </Button>
             </>
           ) : (

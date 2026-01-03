@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { db, auth } from '../firebase/config';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const LogPastTrip = () => {
   const navigate = useNavigate();
@@ -33,31 +35,31 @@ const LogPastTrip = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.title.trim()) {
       newErrors.title = 'Trip title is required';
     }
-    
+
     if (!formData.destination.trim()) {
       newErrors.destination = 'Destination is required';
     }
-    
+
     if (!formData.startDate) {
       newErrors.startDate = 'Start date is required';
     }
-    
+
     if (!formData.endDate) {
       newErrors.endDate = 'End date is required';
     }
-    
+
     if (formData.startDate && formData.endDate && new Date(formData.startDate) > new Date(formData.endDate)) {
       newErrors.endDate = 'End date must be after start date';
     }
-    
+
     if (!formData.description.trim()) {
       newErrors.description = 'Description is required';
     }
-    
+
     if (formData.rating < 1 || formData.rating > 5) {
       newErrors.rating = 'Please select a rating';
     }
@@ -66,51 +68,47 @@ const LogPastTrip = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
+      return;
+    }
+
+    if (!auth.currentUser) {
+      alert("You must be logged in to log a trip");
       return;
     }
 
     setIsSubmitting(true);
 
     // Format date for display
-    const startDate = new Date(formData.startDate);
-    const endDate = new Date(formData.endDate);
-    const monthYear = startDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-    
-    // Create trip object
-    const newTrip = {
-      id: Date.now().toString(),
-      title: formData.title.trim(),
-      destination: formData.destination.trim(),
-      date: monthYear,
-      startDate: formData.startDate,
-      endDate: formData.endDate,
-      desc: formData.description.trim(),
-      description: formData.description.trim(),
-      img: formData.imageUrl.trim() || 'https://lh3.googleusercontent.com/aida-public/AB6AXuCEk8RZsxWRUopuXaPK15_WWfv2OfTqdd7F9rZE-sKN-MgqcmoIumpXfsZJ2Lrstvrpir8iIiwT5PhFYwuaUEsdMYhKrv3N0pT7Eoi5jLV4YLzhntVgiKH7OD2yWIX72qFyFzu0f-JUBW4nOBWv3Vmqk3BB_SZkmfxSIKRITC2CkZ84R_k2VEfFPIILutND2Fl6OQX7IzTs8q2_Z74dt0fVnHz4MFoeBpFmHxo2FlUl1kcD78u4j9fJjDAdTjoxRdvMsgdUSFlE_J9W',
-      rating: parseFloat(formData.rating),
-      tag: formData.tag,
-      status: 'Completed',
-      createdAt: new Date().toISOString()
-    };
+    const startDateObj = new Date(formData.startDate);
+    const monthYear = startDateObj.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 
-    // Get existing trips from localStorage
-    const existingTrips = JSON.parse(localStorage.getItem('pastTrips') || '[]');
-    
-    // Add new trip
-    const updatedTrips = [newTrip, ...existingTrips];
-    
-    // Save to localStorage
-    localStorage.setItem('pastTrips', JSON.stringify(updatedTrips));
-    
-    // Show success message
-    setTimeout(() => {
+    try {
+      await addDoc(collection(db, 'past_trips'), {
+        userId: auth.currentUser.uid,
+        title: formData.title.trim(),
+        destination: formData.destination.trim(),
+        date: monthYear,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        desc: formData.description.trim(),
+        description: formData.description.trim(),
+        img: formData.imageUrl.trim() || 'https://lh3.googleusercontent.com/aida-public/AB6AXuCEk8RZsxWRUopuXaPK15_WWfv2OfTqdd7F9rZE-sKN-MgqcmoIumpXfsZJ2Lrstvrpir8iIiwT5PhFYwuaUEsdMYhKrv3N0pT7Eoi5jLV4YLzhntVgiKH7OD2yWIX72qFyFzu0f-JUBW4nOBWv3Vmqk3BB_SZkmfxSIKRITC2CkZ84R_k2VEfFPIILutND2Fl6OQX7IzTs8q2_Z74dt0fVnHz4MFoeBpFmHxo2FlUl1kcD78u4j9fJjDAdTjoxRdvMsgdUSFlE_J9W',
+        rating: parseFloat(formData.rating),
+        tag: formData.tag,
+        status: 'Completed',
+        createdAt: serverTimestamp()
+      });
       setIsSubmitting(false);
       navigate('/explore');
-    }, 500);
+    } catch (error) {
+      console.error("Error logging past trip: ", error);
+      alert("Failed to log trip. Please try again.");
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -139,9 +137,8 @@ const LogPastTrip = () => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 ${
-                errors.title ? 'border-red-500' : ''
-              }`}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 ${errors.title ? 'border-red-500' : ''
+                }`}
               placeholder="e.g., Winter in NYC"
             />
             {errors.title && <p className="mt-1 text-sm text-red-500">{errors.title}</p>}
@@ -157,9 +154,8 @@ const LogPastTrip = () => {
               name="destination"
               value={formData.destination}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 ${
-                errors.destination ? 'border-red-500' : ''
-              }`}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 ${errors.destination ? 'border-red-500' : ''
+                }`}
               placeholder="e.g., New York, USA"
             />
             {errors.destination && <p className="mt-1 text-sm text-red-500">{errors.destination}</p>}
@@ -195,9 +191,8 @@ const LogPastTrip = () => {
               name="startDate"
               value={formData.startDate}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 ${
-                errors.startDate ? 'border-red-500' : ''
-              }`}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 ${errors.startDate ? 'border-red-500' : ''
+                }`}
             />
             {errors.startDate && <p className="mt-1 text-sm text-red-500">{errors.startDate}</p>}
           </div>
@@ -212,9 +207,8 @@ const LogPastTrip = () => {
               name="endDate"
               value={formData.endDate}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 ${
-                errors.endDate ? 'border-red-500' : ''
-              }`}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 ${errors.endDate ? 'border-red-500' : ''
+                }`}
             />
             {errors.endDate && <p className="mt-1 text-sm text-red-500">{errors.endDate}</p>}
           </div>
@@ -229,9 +223,8 @@ const LogPastTrip = () => {
               value={formData.description}
               onChange={handleChange}
               rows="4"
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 resize-none ${
-                errors.description ? 'border-red-500' : ''
-              }`}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 resize-none ${errors.description ? 'border-red-500' : ''
+                }`}
               placeholder="Tell us about your trip..."
             />
             {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description}</p>}
@@ -270,11 +263,10 @@ const LogPastTrip = () => {
                   }}
                   className="focus:outline-none"
                 >
-                  <span className={`material-icons text-3xl transition-colors ${
-                    star <= formData.rating
+                  <span className={`material-icons text-3xl transition-colors ${star <= formData.rating
                       ? 'text-yellow-500'
                       : 'text-gray-300 dark:text-gray-600'
-                  }`}>
+                    }`}>
                     {star <= formData.rating ? 'star' : 'star_border'}
                   </span>
                 </button>

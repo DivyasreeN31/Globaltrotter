@@ -1,28 +1,60 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { db, auth } from '../firebase/config';
+import { collection, query, where, onSnapshot, doc, getDoc, deleteDoc } from 'firebase/firestore';
 
 const Itinerary = () => {
   const navigate = useNavigate();
-  const [sections, setSections] = useState([
-    { icon: 'flight_takeoff', iconBg: 'bg-blue-100 dark:bg-blue-900/30', iconColor: 'text-blue-600 dark:text-blue-400', title: 'Section 1: Flight to Tokyo', content: 'Departure from JFK International Airport to Narita International Airport. Includes a layover in Seattle for 2 hours. Ensure all travel documents and visa requirements are met before departure. Airline: ANA All Nippon Airways.', dateRange: 'Oct 12, 2023 to Oct 13, 2023', budget: '1,200.00' },
-    { icon: 'hotel', iconBg: 'bg-purple-100 dark:bg-purple-900/30', iconColor: 'text-purple-600 dark:text-purple-400', title: 'Section 2: Accommodation in Shinjuku', content: 'Stay at the Hotel Gracery Shinjuku. Centrally located near the station and nightlife district. Includes breakfast buffet. Check-in time is 3:00 PM. Booking reference #GH8923.', dateRange: 'Oct 13, 2023 to Oct 18, 2023', budget: '850.00' },
-    { icon: 'local_activity', iconBg: 'bg-orange-100 dark:bg-orange-900/30', iconColor: 'text-orange-600 dark:text-orange-400', title: 'Section 3: Cultural Tour in Kyoto', content: 'Guided tour of Kinkaku-ji (Golden Pavilion), Fushimi Inari-taisha Shrine, and Arashiyama Bamboo Grove. Includes traditional tea ceremony experience and lunch at a local Ryokan.', dateRange: 'Oct 19, 2023 to Oct 20, 2023', budget: '300.00' }
-  ]);
-  const [ongoingTrip, setOngoingTrip] = useState("Bali Retreat");
+  const { tripId } = useParams();
+  const [sections, setSections] = useState([]);
+  const [trip, setTrip] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedSections = JSON.parse(localStorage.getItem('itinerary-sections') || '[]');
-    if (savedSections.length > 0) {
-      setSections(prev => {
-        const uniqueSaved = savedSections.filter(ss => !prev.some(p => p.id === ss.id));
-        return [...prev, ...uniqueSaved];
+    if (!tripId) return;
+
+    // Fetch trip details
+    const fetchTrip = async () => {
+      try {
+        const tripDoc = await getDoc(doc(db, 'trips', tripId));
+        if (tripDoc.exists()) {
+          setTrip(tripDoc.data());
+        }
+      } catch (error) {
+        console.error("Error fetching trip:", error);
+      }
+    };
+
+    fetchTrip();
+
+    // Fetch itinerary sections in real-time
+    const q = query(collection(db, 'itinerary_sections'), where('tripId', '==', tripId));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const sectionsData = [];
+      querySnapshot.forEach((doc) => {
+        sectionsData.push({ id: doc.id, ...doc.data() });
       });
-    }
-  }, []);
+      // Sort sections by some criteria if needed, e.g., title or date
+      setSections(sectionsData);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [tripId]);
 
   const handleAddSection = () => {
-    const newId = Date.now().toString();
-    navigate(`/section/${newId}`);
+    const newId = `new-${Date.now()}`;
+    navigate(`/itinerary/${tripId}/section/${newId}`);
+  };
+
+  const handleDeleteSection = async (sectionId) => {
+    if (window.confirm('Are you sure you want to delete this section?')) {
+      try {
+        await deleteDoc(doc(db, 'itinerary_sections', sectionId));
+      } catch (error) {
+        console.error("Error deleting section:", error);
+      }
+    }
   };
 
   return (
@@ -30,7 +62,7 @@ const Itinerary = () => {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-text-light dark:text-text-dark mb-2">Build Itinerary</h1>
-          <p className="text-subtext-light dark:text-subtext-dark">Plan your upcoming adventure to <span className="text-primary font-semibold">{ongoingTrip}</span> in detail.</p>
+          <p className="text-subtext-light dark:text-subtext-dark">Plan your upcoming adventure to <span className="text-primary font-semibold">{trip?.destination || '...'}</span> in detail.</p>
         </div>
         <button className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary-hover dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
           <span className="material-icons text-base">save</span> Save Draft
@@ -48,12 +80,15 @@ const Itinerary = () => {
             </div>
             <div className="flex gap-2">
               <button
-                onClick={() => section.id && navigate(`/section/${section.id}`)}
+                onClick={() => navigate(`/itinerary/${tripId}/section/${section.id}`)}
                 className="text-subtext-light dark:text-subtext-dark hover:text-primary transition-colors"
               >
                 <span className="material-icons">edit</span>
               </button>
-              <button className="text-subtext-light dark:text-subtext-dark hover:text-red-500 transition-colors">
+              <button
+                onClick={() => handleDeleteSection(section.id)}
+                className="text-subtext-light dark:text-subtext-dark hover:text-red-500 transition-colors"
+              >
                 <span className="material-icons">delete_outline</span>
               </button>
             </div>

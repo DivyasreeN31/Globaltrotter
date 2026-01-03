@@ -1,24 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase/config';
+import { useAuth } from '../contexts/AuthContext';
 
 const ProtectedRoute = ({ children, requiredRole }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const { user, isAuthenticated, loading } = useAuth();
   const location = useLocation();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setIsAuthenticated(!!currentUser);
-      setUser(currentUser);
-      setLoading(false);
-    });
-    
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, []);
 
   if (loading) {
     return (

@@ -17,29 +17,33 @@ import LogPastTrip from './pages/LogPastTrip';
 import SectionPage from './pages/SectionPage';
 import CreatePost from './pages/CreatePost';
 
+import { AuthProvider } from './contexts/AuthContext';
+
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
-          <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/trips" element={<ProtectedRoute><Trips /></ProtectedRoute>} />
-          <Route path="/itinerary" element={<ProtectedRoute><Itinerary /></ProtectedRoute>} />
-          <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
-          <Route path="/community/create" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
-          <Route path="/budget" element={<ProtectedRoute><Budget /></ProtectedRoute>} />
-          <Route path="/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
-          <Route path="/citysearch" element={<ProtectedRoute><CitySearch /></ProtectedRoute>} />
-          <Route path="/newtrip" element={<ProtectedRoute><NewTrip /></ProtectedRoute>} />
-          <Route path="/log-past-trip" element={<ProtectedRoute><LogPastTrip /></ProtectedRoute>} />
-          <Route path="/section/:sectionId" element={<ProtectedRoute><SectionPage /></ProtectedRoute>} />
-        </Route>
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/trips" element={<ProtectedRoute><Trips /></ProtectedRoute>} />
+            <Route path="/itinerary/:tripId" element={<ProtectedRoute><Itinerary /></ProtectedRoute>} />
+            <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+            <Route path="/community/create" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
+            <Route path="/budget/:tripId" element={<ProtectedRoute><Budget /></ProtectedRoute>} />
+            <Route path="/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
+            <Route path="/citysearch" element={<ProtectedRoute><CitySearch /></ProtectedRoute>} />
+            <Route path="/newtrip" element={<ProtectedRoute><NewTrip /></ProtectedRoute>} />
+            <Route path="/log-past-trip" element={<ProtectedRoute><LogPastTrip /></ProtectedRoute>} />
+            <Route path="/itinerary/:tripId/section/:sectionId" element={<ProtectedRoute><SectionPage /></ProtectedRoute>} />
+          </Route>
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

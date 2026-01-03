@@ -1,26 +1,41 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { db, auth } from '../firebase/config';
+import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 
 const Explore = () => {
   const [pastTrips, setPastTrips] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get trips from localStorage
-    const savedTrips = JSON.parse(localStorage.getItem('pastTrips') || '[]');
-    // Merge with default trips (you can remove default trips if you want only saved ones)
     const defaultTrips = [
       { title: 'Winter in NYC', date: 'Dec 2023', desc: 'A week-long exploration of Manhattan, featuring ice skating.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCEk8RZsxWRUopuXaPK15_WWfv2OfTqdd7F9rZE-sKN-MgqcmoIumpXfsZJ2Lrstvrpir8iIiwT5PhFYwuaUEsdMYhKrv3N0pT7Eoi5jLV4YLzhntVgiKH7OD2yWIX72qFyFzu0f-JUBW4nOBWv3Vmqk3BB_SZkmfxSIKRITC2CkZ84R_k2VEfFPIILutND2Fl6OQX7IzTs8q2_Z74dt0fVnHz4MFoeBpFmHxo2FlUl1kcD78u4j9fJjDAdTjoxRdvMsgdUSFlE_J9W' },
       { title: 'Appalachian Hike', date: 'Oct 2023', desc: 'Hiking through the Smoky Mountains during peak fall foliage.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAlXFThcoZKRbYtp5q_ptQCOxZ_L6Atuz0EkVg5sOR_AJDQ7A5nGJTpfR-rgO6uGXUQU6qg8i4PdgMcbvVbUrNRuusk3EDI9pmTvKlGG6aorurlXUupk6GfVrHebAA9uETYJs_DS91pOVXJ5s3jX29FXKwi7xOVFby6eKFRi6z8oGhwAipa79Mc1i_PTm29IbGd_OyvDNV0JrV-xf3QZw_Vf8ff7K8j2R14AkWzRbc7SqnQUfyrsAevWGrK2norTJzK6xNvxvmmJNNn' }
     ];
-    // Combine saved trips (first) with default trips
-    setPastTrips([...savedTrips.map(trip => ({
-      title: trip.title,
-      date: trip.date,
-      desc: trip.desc || trip.description,
-      img: trip.img
-    })), ...defaultTrips]);
+
+    if (!auth.currentUser) {
+      setPastTrips(defaultTrips);
+      setLoading(false);
+      return;
+    }
+
+    const q = query(
+      collection(db, 'past_trips'),
+      where('userId', '==', auth.currentUser.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const tripsData = [];
+      querySnapshot.forEach((doc) => {
+        tripsData.push({ id: doc.id, ...doc.data() });
+      });
+      setPastTrips([...tripsData, ...defaultTrips]);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -63,8 +78,8 @@ const Explore = () => {
               key={cat}
               onClick={() => setActiveCategory(cat)}
               className={`flex items-center gap-2 px-6 py-2 rounded-full border transition-all text-sm font-medium whitespace-nowrap shadow-sm ${activeCategory === cat
-                  ? 'bg-primary text-white border-primary'
-                  : 'bg-surface-light dark:bg-surface-dark text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800'
+                ? 'bg-primary text-white border-primary'
+                : 'bg-surface-light dark:bg-surface-dark text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800'
                 }`}
             >
               {cat}

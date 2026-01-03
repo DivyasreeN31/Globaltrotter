@@ -1,27 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { db } from '../firebase/config';
+import { doc, getDoc, collection, query, where, onSnapshot, orderBy, addDoc, serverTimestamp } from 'firebase/firestore';
+import { auth } from '../firebase/config';
 
 const Budget = () => {
+  const { tripId } = useParams();
+  const navigate = useNavigate();
+  const [trip, setTrip] = useState(null);
   const [expandedDays, setExpandedDays] = useState({ 0: true });
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newDay, setNewDay] = useState({ title: '', date: '', budget: '' });
-  const [days, setDays] = useState([
-    {
-      day: '01', title: 'Arrival in Tokyo', date: 'Oct 12, 2023', budget: '₹150.00', activities: [
-        { icon: 'flight_land', iconBg: 'bg-blue-100 dark:bg-blue-900/30', iconColor: 'text-blue-600 dark:text-blue-400', title: 'Land at Narita Airport', time: '10:00 AM', desc: 'Pick up JR Rail Pass and pocket Wi-Fi.', expense: '₹25.00', expenseType: 'Transport' },
-        { icon: 'hotel', iconBg: 'bg-purple-100 dark:bg-purple-900/30', iconColor: 'text-purple-600 dark:text-purple-400', title: 'Check-in at Shinjuku Hotel', time: '02:00 PM', desc: 'Hotel Gracery Shinjuku. Rest and freshen up.', expense: 'Paid', expenseType: 'Accommodation' },
-        { icon: 'ramen_dining', iconBg: 'bg-amber-100 dark:bg-amber-900/30', iconColor: 'text-amber-600 dark:text-amber-400', title: 'Dinner at Omoide Yokocho', time: '07:00 PM', desc: 'Try Yakitori alley. Cash only.', expense: '₹45.00', expenseType: 'Food' }
-      ]
-    },
-    {
-      day: '02', title: 'Exploring Asakusa', date: 'Oct 13, 2023', budget: '₹85.00', activities: [
-        { icon: 'temple_buddhist', iconBg: 'bg-red-100 dark:bg-red-900/30', iconColor: 'text-red-600 dark:text-red-400', title: 'Senso-ji Temple', time: '09:00 AM', desc: 'Oldest temple in Tokyo. Try Omikuji.', expense: 'Free', expenseType: 'Entrance' },
-        { icon: 'park', iconBg: 'bg-emerald-100 dark:bg-emerald-900/30', iconColor: 'text-emerald-600 dark:text-emerald-400', title: 'Sumida Park Walk', time: '11:30 AM', desc: 'Walk along the river. Great view of Skytree.', expense: '₹15.00', expenseType: 'Snacks' },
-        { icon: 'directions_boat', iconBg: 'bg-sky-100 dark:bg-sky-900/30', iconColor: 'text-sky-600 dark:text-sky-400', title: 'Tokyo Water Bus', time: '02:00 PM', desc: 'Cruise to Odaiba. Scenic route.', expense: '₹18.00', expenseType: 'Ticket' }
-      ]
-    }
-  ]);
+  const [days, setDays] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!tripId) return;
+
+    // Fetch trip details
+    const fetchTrip = async () => {
+      try {
+        const tripDoc = await getDoc(doc(db, 'trips', tripId));
+        if (tripDoc.exists()) {
+          setTrip(tripDoc.data());
+        }
+      } catch (error) {
+        console.error("Error fetching trip:", error);
+      }
+    };
+    fetchTrip();
+
+    // Fetch budget days in real-time
+    const q = query(
+      collection(db, 'budget_days'),
+      where('tripId', '==', tripId),
+      orderBy('day', 'asc')
+    );
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const daysData = [];
+      querySnapshot.forEach((doc) => {
+        daysData.push({ id: doc.id, ...doc.data() });
+      });
+      setDays(daysData);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [tripId]);
+
 
   const toggleDay = (idx) => {
     setExpandedDays(prev => ({ ...prev, [idx]: !prev[idx] }));
@@ -31,61 +60,75 @@ const Budget = () => {
     setIsModalOpen(true);
   };
 
-  const handleSaveDay = (e) => {
+  const handleSaveDay = async (e) => {
     e.preventDefault();
-    if (!newDay.title || !newDay.date) return;
+    if (!newDay.title || !newDay.date || !auth.currentUser) return;
 
-    const nextDayNum = (days.length + 1).toString().padStart(2, '0');
-    const dayToSave = {
-      day: nextDayNum,
-      title: newDay.title,
-      date: newDay.date,
-      budget: `₹${parseFloat(newDay.budget || 0).toFixed(2)}`,
-      activities: []
-    };
+    try {
+      const nextDayNum = (days.length + 1).toString().padStart(2, '0');
+      const dayToSave = {
+        tripId,
+        userId: auth.currentUser.uid,
+        day: nextDayNum,
+        title: newDay.title,
+        date: newDay.date,
+        budget: `₹${parseFloat(newDay.budget || 0).toFixed(2)}`,
+        activities: [],
+        createdAt: serverTimestamp()
+      };
 
-    setDays([...days, dayToSave]);
-    setExpandedDays(prev => ({ ...prev, [days.length]: true }));
-    setIsModalOpen(false);
-    setNewDay({ title: '', date: '', budget: '' });
+      await addDoc(collection(db, 'budget_days'), dayToSave);
+
+      setIsModalOpen(false);
+      setNewDay({ title: '', date: '', budget: '' });
+    } catch (error) {
+      console.error("Error saving budget day:", error);
+      alert("Failed to save day. Please try again.");
+    }
   };
   return (
     <main className="flex-1 overflow-y-auto">
       <div className="sticky top-0 z-40 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur border-b border-border-light dark:border-border-dark mb-8 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="relative flex-1 max-w-md group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="material-icons-round text-text-sub-light dark:text-text-sub-dark text-xl">search</span>
-              </div>
-              <input
-                className="block w-full pl-10 pr-3 py-2 border border-border-light dark:border-border-dark rounded-full leading-5 bg-card-light dark:bg-card-dark placeholder-text-sub-light dark:placeholder-text-sub-dark focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-all shadow-sm"
-                placeholder="Search itinerary..."
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+          {loading ? (
+            <div className="flex justify-center py-4">
+              <span className="material-icons animate-spin text-primary">refresh</span>
             </div>
-            {['All', 'Food', 'Transport', 'Accommodation', 'Tickets'].map((filter) => (
-              <button
-                key={filter}
-                onClick={() => setActiveFilter(filter)}
-                className={`inline-flex items-center px-6 py-2 border shadow-sm text-sm font-medium rounded-full transition-all whitespace-nowrap ${activeFilter === filter
-                  ? 'bg-primary text-white border-primary'
-                  : 'text-text-sub-light dark:text-text-sub-dark bg-card-light dark:bg-card-dark border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
-              >
-                {filter}
-              </button>
-            ))}
-          </div>
+          ) : (
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="relative flex-1 max-w-md group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <span className="material-icons-round text-text-sub-light dark:text-text-sub-dark text-xl">search</span>
+                </div>
+                <input
+                  className="block w-full pl-10 pr-3 py-2 border border-border-light dark:border-border-dark rounded-full leading-5 bg-card-light dark:bg-card-dark placeholder-text-sub-light dark:placeholder-text-sub-dark focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-all shadow-sm"
+                  placeholder="Search itinerary..."
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              {['All', 'Food', 'Transport', 'Accommodation', 'Tickets'].map((filter) => (
+                <button
+                  key={filter}
+                  onClick={() => setActiveFilter(filter)}
+                  className={`inline-flex items-center px-6 py-2 border shadow-sm text-sm font-medium rounded-full transition-all whitespace-nowrap ${activeFilter === filter
+                    ? 'bg-primary text-white border-primary'
+                    : 'text-text-sub-light dark:text-text-sub-dark bg-card-light dark:bg-card-dark border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-800'
+                    }`}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-10 text-center">
           <h2 className="text-3xl font-extrabold text-text-main-light dark:text-text-main-dark sm:text-4xl">
-            Itinerary for <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">Japan Trip</span>
+            Itinerary for <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">{trip?.destination || '...'} Trip</span>
           </h2>
           <p className="mt-2 text-lg text-text-sub-light dark:text-text-sub-dark">Explore the culture, food, and scenery.</p>
           <div className="mt-4 inline-flex items-center px-4 py-1.5 rounded-full text-sm font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800">

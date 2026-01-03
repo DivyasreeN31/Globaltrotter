@@ -1,24 +1,37 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { db } from '../firebase/config';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 
 const Community = () => {
-  const [posts, setPosts] = useState([
-    { id: 1, name: 'Sarah Jenkins', time: '2 hours ago', location: 'Paris, France', content: "Just got back from an amazing 5-day trip to Paris! The Eiffel Tower at sunset is absolutely breathtaking. Highly recommend grabbing a crepe near the Trocadéro gardens. Here are some of my favorite shots! 🥐🗼", likes: 243, comments: 18, images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuB89ieirM4uI72FoIRhfglnjsikgmodQtHcwrkpthOv_0wcccg7LqxnMi5v5-EzGHO1qyg8j47OY8PS4y9dMj7jk_y1o7iJYkdAMrOOAQB7FUEa3n-RZsA8QX-rz_GurqIBuF2QKieDIkL5y5YCGvcmMdrxClymAqwT91ykQjMwY8hVDRXjWZytyqG6hJqJX_NDtdfP_DJEMfj-LrCbnnSxlMokUwUkB2EOH4iTM5eE76nBehgaSZTjShDFgCTc5Xcrp7Lzi5KquEbx', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBd0B3A2nMoZuDZOc_2QQJTh4gbyIYm8MOQZfxnnHcPguuNwwnEVmFY4GQAt-YFV86AQajJuw5zsJpwZtt5S_w_DAs5aVXKKSOzyCLPh-G2o47teM3ywkr-r-ha9UWUeDoNmcT-vjE816d1Kkep9pMquAVW-dzhPgR3O01YE8TJKq0-v7OAUCrSL_A3Xk8SVlv2oMouxdz8KLUk754rgoHroULfiovMR1I4P6d63bM9raWk5gw3eppUgukKwxKFetMB4MNqf9S31iVn'] },
-    { id: 2, name: 'Michael Chen', time: '5 hours ago', location: 'Kyoto, Japan', content: "Kyoto in autumn is pure magic. The colors of the leaves at Kinkaku-ji are unlike anything I've ever seen. Pro tip: Get there early (around 7 AM) to beat the crowds! 🍁🏯", likes: 156, comments: 32, hasItinerary: true, itineraryTitle: 'Kyoto 3-Day Itinerary' },
-    { id: 3, name: 'David Ross', time: '1 day ago', location: 'Cusco, Peru', content: 'Finally made it to Machu Picchu! The hike was tough but absolutely worth every step. The altitude is no joke though, make sure to acclimate in Cusco for a few days first.', likes: 892, comments: 145, singleImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDX0YOjp6vaYSj9kwOQy9Y4mGhf7Sr4Re3dEAt2kOq8z5-o6vLWuB3a6FXF9a4Pm8i9BKzlSK2ixboqaLXmX4jMYGUwaokJyYSHmoKClLVCoiAxqeBdaoKCG2450cVP7a9L1JiiEH2Wk9EtxiX0ItsXwbTRXnaxUQKMr6ANUEjQBOqeoTSzzf0U2SMfTAZ4nql-f8Bwwt6ZkyABK5dWEhjAh82ZHxJPXOleQTmzW0sNdn6_PvRHWHzC23iZ9v_jtzc483MnciZCBv0op' }
-  ]);
+  const [posts, setPosts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
 
   useEffect(() => {
-    const savedPosts = JSON.parse(localStorage.getItem('community_posts') || '[]');
-    if (savedPosts.length > 0) {
-      setPosts(prev => {
-        const uniqueNew = savedPosts.filter(sp => !prev.some(p => p.id === sp.id));
-        return [...uniqueNew, ...prev];
+    const q = query(collection(db, 'community_posts'), orderBy('timestamp', 'desc'));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const postsData = [];
+      querySnapshot.forEach((doc) => {
+        postsData.push({ id: doc.id, ...doc.data() });
       });
-    }
+      setPosts(postsData);
+    });
+
+    return () => unsubscribe();
   }, []);
+
+  const formatTime = (timestamp) => {
+    if (!timestamp) return 'Just now';
+    const date = timestamp.toDate();
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    return date.toLocaleDateString();
+  };
 
   return (
     <main className="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
@@ -42,8 +55,8 @@ const Community = () => {
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
                 className={`flex items-center px-4 py-2 border rounded-lg text-sm font-medium transition-all whitespace-nowrap ${activeFilter === filter
-                    ? 'bg-primary text-white border-primary shadow-sm'
-                    : 'text-text-muted-light dark:text-text-muted-dark bg-surface-light dark:bg-surface-dark border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ? 'bg-primary text-white border-primary shadow-sm'
+                  : 'text-text-muted-light dark:text-text-muted-dark bg-surface-light dark:bg-surface-dark border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
               >
                 {filter}
@@ -69,7 +82,7 @@ const Community = () => {
             post.name.toLowerCase().includes(searchQuery.toLowerCase());
           const matchesFilter = activeFilter === 'All' ||
             (activeFilter === 'Photos' && (post.images?.length > 0 || post.singleImage)) ||
-            (activeFilter === 'Popular' && post.likes > 200) ||
+            (activeFilter === 'Popular' && post.likes?.length > 200) ||
             (activeFilter === 'Recent'); // Simple simulation
           return matchesSearch && matchesFilter;
         }).map((post, idx) => (
@@ -82,7 +95,7 @@ const Community = () => {
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="text-base font-semibold text-text-main-light dark:text-text-main-dark">{post.name}</h3>
-                    <p className="text-xs text-text-muted-light dark:text-text-muted-dark">{post.time} • {post.location}</p>
+                    <p className="text-xs text-text-muted-light dark:text-text-muted-dark">{formatTime(post.timestamp)} • {post.location}</p>
                   </div>
                   <button className="text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors">
                     <span className="material-icons-outlined">more_horiz</span>
@@ -119,7 +132,7 @@ const Community = () => {
                 <div className="flex items-center gap-6 mt-4 pt-3 border-t border-border-light dark:border-gray-700">
                   <button className="flex items-center gap-1.5 text-sm text-text-muted-light dark:text-text-muted-dark hover:text-rose-500 dark:hover:text-rose-400 transition-colors group">
                     <span className="material-icons-outlined group-hover:text-rose-500 dark:group-hover:text-rose-400 transition-colors">favorite_border</span>
-                    {post.likes}
+                    {post.likes?.length || 0}
                   </button>
                   <button className="flex items-center gap-1.5 text-sm text-text-muted-light dark:text-text-muted-dark hover:text-primary transition-colors group">
                     <span className="material-icons-outlined group-hover:text-primary transition-colors">chat_bubble_outline</span>

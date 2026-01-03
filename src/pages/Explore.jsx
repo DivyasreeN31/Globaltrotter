@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 
 const Explore = () => {
   const [pastTrips, setPastTrips] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState('All');
 
   useEffect(() => {
     // Get trips from localStorage
@@ -13,20 +15,20 @@ const Explore = () => {
       { title: 'Appalachian Hike', date: 'Oct 2023', desc: 'Hiking through the Smoky Mountains during peak fall foliage.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAlXFThcoZKRbYtp5q_ptQCOxZ_L6Atuz0EkVg5sOR_AJDQ7A5nGJTpfR-rgO6uGXUQU6qg8i4PdgMcbvVbUrNRuusk3EDI9pmTvKlGG6aorurlXUupk6GfVrHebAA9uETYJs_DS91pOVXJ5s3jX29FXKwi7xOVFby6eKFRi6z8oGhwAipa79Mc1i_PTm29IbGd_OyvDNV0JrV-xf3QZw_Vf8ff7K8j2R14AkWzRbc7SqnQUfyrsAevWGrK2norTJzK6xNvxvmmJNNn' }
     ];
     // Combine saved trips (first) with default trips
-    setPastTrips([...savedTrips.map(trip => ({ 
-      title: trip.title, 
-      date: trip.date, 
-      desc: trip.desc || trip.description, 
-      img: trip.img 
+    setPastTrips([...savedTrips.map(trip => ({
+      title: trip.title,
+      date: trip.date,
+      desc: trip.desc || trip.description,
+      img: trip.img
     })), ...defaultTrips]);
   }, []);
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
       <section className="relative h-[500px] w-full rounded-3xl overflow-hidden group shadow-xl">
-        <img 
-          alt="Scenic mountain landscape with a traveler" 
-          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" 
+        <img
+          alt="Scenic mountain landscape with a traveler"
+          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcCiTOdhkISnS8-alCXEHFYkbZQ7WYj32xd9xVj7NRrMrTmnVn6BJdjO9H-ext5V-dYIjWwSnzP2nUW99-Yw6SntfZ7EBe7pq_OWCkqP60eCik861wV3W_BbV6hWrgMFjH90cQsdEz6TtaLDwXQuecvKbHkW4C80RU5Fft12PJOHY_s9iW3_V_LPz8b2EAxZM-EHpRB9JpG_-iGjh4XmB7oqjgit7TGKQC7KoYLlxRcD7XUt56DAM7q8uN-X4mzcRdj_DWkRRM2Y9D"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-center items-center text-center p-8 md:p-12">
@@ -40,12 +42,14 @@ const Explore = () => {
             <div className="pl-4 pr-2 text-gray-400">
               <span className="material-icons">search</span>
             </div>
-            <input 
-              className="w-full bg-transparent border-none text-gray-900 dark:text-white placeholder-gray-500 focus:ring-0 text-lg py-3" 
-              placeholder="Search destinations, trips, or activities..." 
+            <input
+              className="w-full bg-transparent border-none text-gray-900 dark:text-white placeholder-gray-500 focus:ring-0 text-lg py-3 outline-none"
+              placeholder="Search destinations, trips, or activities..."
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button className="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-full font-bold transition-colors shadow-md">
+            <button className="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-full font-bold transition-all shadow-md active:scale-95">
               Search
             </button>
           </div>
@@ -54,18 +58,18 @@ const Explore = () => {
 
       <section className="flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex gap-2 overflow-x-auto hide-scroll pb-1 md:pb-0 w-full md:w-auto">
-          <button className="flex items-center gap-2 px-4 py-2 bg-surface-light dark:bg-surface-dark text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-sm font-medium whitespace-nowrap shadow-sm">
-            <span className="material-icons text-sm">tune</span>
-            Filters
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-surface-light dark:bg-surface-dark text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-sm font-medium whitespace-nowrap shadow-sm">
-            <span className="material-icons text-sm">calendar_today</span>
-            Dates
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-surface-light dark:bg-surface-dark text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-sm font-medium whitespace-nowrap shadow-sm">
-            <span className="material-icons text-sm">group</span>
-            Travelers
-          </button>
+          {['All', 'Culture', 'Coastal', 'City', 'Nature', 'Romance'].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`flex items-center gap-2 px-6 py-2 rounded-full border transition-all text-sm font-medium whitespace-nowrap shadow-sm ${activeCategory === cat
+                  ? 'bg-primary text-white border-primary'
+                  : 'bg-surface-light dark:bg-surface-dark text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
       </section>
 
@@ -75,9 +79,9 @@ const Explore = () => {
             <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-white">Top Regional Selections</h2>
             <p className="text-subtext-light dark:text-subtext-dark mt-1">Curated destinations just for you</p>
           </div>
-          <a className="text-primary hover:text-primary-dark font-medium text-sm flex items-center gap-1" href="#">
+          <Link className="text-primary hover:text-primary-hover font-medium text-sm flex items-center gap-1 transition-colors" to="/explore">
             View all <span className="material-icons text-sm">arrow_forward</span>
-          </a>
+          </Link>
         </div>
         <div className="flex overflow-x-auto pb-6 gap-6 hide-scroll snap-x snap-mandatory">
           {[
@@ -86,7 +90,11 @@ const Explore = () => {
             { name: 'Paris, France', category: 'City & Dining', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD0IbTd4hDYCixBXGCfOYPyn5LvsWEREynIyGIAsHEdlatY9_si9ED7q0eqCDmVzrWYow1L6SfsS-oRuMwdU6YWbCzypfe6Ch9MMg_vZNoU6a5TEgu1k8eu-XmGHR2TJsr6bemVm4FG2kArDE48VOtH668Y4x_TZNp_J8odT44QP1D9s8Q1hxakP34jbahg8bCwlL7xCTonl_YZz7N3buhMOXxylLMUgRjljr5Kx5Yi_niC0EwlwiEzqCC46h969_rihlrLAH23TABW' },
             { name: 'Bali, Indonesia', tag: 'Trending', tagColor: 'bg-green-600', category: 'Beaches & Nature', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAaCpPyfoDYC1sMn3DtbeoNH1EIBJ5k1kf8upz1wSE9NAfuD0Js3fPtGMFjt6KsuCVDcMBBrbl44anFCtE56lfU9DIsMpxZ5U8JWy9fEHwKYbgKQlceCLcB47EhpRnGS_IrM6c_D4QNLHNCke5edOscjrQBUhPHNM3vbbmskpM12BHpcKbIUtKIFxFF_C6ytFnGnYz2DeqkyUft77Yhil4XWZzvQxyWy1HbbHLBxTTrvE7jMDHKdYk0TElnN2KDx-teDVsSsBJFoCNb' },
             { name: 'Santorini', category: 'Romance & Views', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBDCLf_-5UH-UsL_2UWcbGjO_6iR6VyR8VNCevLtdFO2HZrtvdoBi5ET9s5RjLaPXASqAW5tVc91sdJbiAa0pdicJGrAU1eQpdvytECQDq5qo4RIViJ3wGyNxtmo94mG_8-aVROTEDvI2HGJIh9ggX3GwKlWw73oVJFpRo-3FS1S4HzvyixqRl_ggEll9D4HKuQ01hw3gy4LYfCwUzFu2uu-IaoZkLrAVsbbOI6BM5iaxp3-RFuIQXEt5k03VS1JMxZqz2u39AbxjgO' }
-          ].map((dest, idx) => (
+          ].filter(dest =>
+            (activeCategory === 'All' || dest.category.includes(activeCategory)) &&
+            (dest.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              dest.category.toLowerCase().includes(searchQuery.toLowerCase()))
+          ).map((dest, idx) => (
             <div key={idx} className="min-w-[260px] md:min-w-[280px] snap-center group cursor-pointer">
               <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3 shadow-md">
                 <img alt={dest.name} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" src={dest.img} />

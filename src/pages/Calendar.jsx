@@ -1,21 +1,40 @@
+import React, { useState } from 'react';
+
 const Calendar = () => {
+  const [currentDate, setCurrentDate] = useState(new Date(2024, 0, 1)); // Jan 2024
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState('All');
+
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const calendarDays = [];
-  
+
+  // Get days in month
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
   // Empty days for the start of the month
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < firstDayOfMonth; i++) {
     calendarDays.push({ day: null, isEmpty: true });
   }
-  
+
   // Actual days
-  for (let i = 1; i <= 31; i++) {
+  for (let i = 1; i <= daysInMonth; i++) {
     calendarDays.push({ day: i, isEmpty: false });
   }
-  
-  // Empty days for the end of the month
-  for (let i = 0; i < 5; i++) {
-    calendarDays.push({ day: null, isEmpty: true });
-  }
+
+  const handlePrevMonth = () => {
+    setCurrentDate(new Date(year, month - 1, 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(new Date(year, month + 1, 1));
+  };
+
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
 
   const getTripForDay = (day) => {
     if (day === 4) return { name: 'PARIS TRIP', color: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 border-primary' };
@@ -36,21 +55,27 @@ const Calendar = () => {
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <span className="material-symbols-outlined text-gray-400">search</span>
           </div>
-          <input className="block w-full pl-10 pr-3 py-2 border border-border-light dark:border-border-dark rounded-md leading-5 bg-white dark:bg-gray-800 text-text-light dark:text-text-dark placeholder-text-secondary-light dark:placeholder-text-secondary-dark focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition duration-150 ease-in-out" placeholder="Search trips, events..." type="text" />
+          <input
+            className="block w-full pl-10 pr-3 py-2 border border-border-light dark:border-border-dark rounded-md leading-5 bg-white dark:bg-gray-800 text-text-light dark:text-text-dark placeholder-text-secondary-light dark:placeholder-text-secondary-dark focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition duration-150 ease-in-out"
+            placeholder="Search trips, events..."
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
         <div className="flex gap-3 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
-          <button className="flex items-center justify-center px-4 py-2 border border-border-light dark:border-border-dark rounded-md shadow-sm text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none whitespace-nowrap">
-            <span className="material-symbols-outlined text-lg mr-2">grid_view</span>
-            Group by
-          </button>
-          <button className="flex items-center justify-center px-4 py-2 border border-border-light dark:border-border-dark rounded-md shadow-sm text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none whitespace-nowrap">
-            <span className="material-symbols-outlined text-lg mr-2">filter_list</span>
-            Filter
-          </button>
-          <button className="flex items-center justify-center px-4 py-2 border border-border-light dark:border-border-dark rounded-md shadow-sm text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none whitespace-nowrap">
-            <span className="material-symbols-outlined text-lg mr-2">sort</span>
-            Sort by...
-          </button>
+          {['All', 'Paris', 'NYC', 'Japan'].map((filter) => (
+            <button
+              key={filter}
+              onClick={() => setActiveFilter(filter)}
+              className={`flex items-center justify-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium transition-all whitespace-nowrap ${activeFilter === filter
+                  ? 'bg-primary text-white border-primary'
+                  : 'text-text-secondary-light dark:text-text-secondary-dark bg-white dark:bg-gray-800 border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-700'
+                }`}
+            >
+              {filter}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -58,11 +83,17 @@ const Calendar = () => {
         <div className="flex items-center justify-between px-6 py-4 border-b border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800">
           <h2 className="text-xl font-semibold text-text-light dark:text-text-dark">Calendar View</h2>
           <div className="flex items-center space-x-4">
-            <button className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-text-secondary-light dark:text-text-secondary-dark transition">
+            <button
+              onClick={handlePrevMonth}
+              className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-text-secondary-light dark:text-text-secondary-dark transition active:scale-90"
+            >
               <span className="material-symbols-outlined">chevron_left</span>
             </button>
-            <h3 className="text-lg font-bold text-text-light dark:text-text-dark min-w-[140px] text-center">January 2024</h3>
-            <button className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-text-secondary-light dark:text-text-secondary-dark transition">
+            <h3 className="text-lg font-bold text-text-light dark:text-text-dark min-w-[140px] text-center">{monthNames[month]} {year}</h3>
+            <button
+              onClick={handleNextMonth}
+              className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-text-secondary-light dark:text-text-secondary-dark transition active:scale-90"
+            >
               <span className="material-symbols-outlined">chevron_right</span>
             </button>
           </div>
@@ -77,18 +108,24 @@ const Calendar = () => {
         </div>
         <div className="grid grid-cols-7 bg-surface-light dark:bg-surface-dark">
           {calendarDays.map((item, idx) => {
-            const trip = item.day ? getTripForDay(item.day) : null;
+            let trip = item.day ? getTripForDay(item.day) : null;
+            if (trip) {
+              const matchesSearch = trip.name.toLowerCase().includes(searchQuery.toLowerCase());
+              const matchesFilter = activeFilter === 'All' || trip.name.toUpperCase().includes(activeFilter.toUpperCase());
+              if (!matchesSearch || !matchesFilter) {
+                trip = null;
+              }
+            }
             const isToday = item.day === 15;
             return (
-              <div 
-                key={idx} 
-                className={`min-h-[120px] p-2 border-b border-r border-border-light dark:border-border-dark ${
-                  item.isEmpty 
-                    ? 'bg-gray-50/50 dark:bg-gray-800/30' 
-                    : isToday 
-                      ? 'bg-gray-100 dark:bg-gray-800/60' 
-                      : 'hover:bg-gray-50 dark:hover:bg-gray-800/50 transition relative group'
-                }`}
+              <div
+                key={idx}
+                className={`min-h-[120px] p-2 border-b border-r border-border-light dark:border-border-dark ${item.isEmpty
+                  ? 'bg-gray-50/50 dark:bg-gray-800/30'
+                  : isToday
+                    ? 'bg-gray-100 dark:bg-gray-800/60'
+                    : 'hover:bg-gray-50 dark:hover:bg-gray-800/50 transition relative group'
+                  }`}
               >
                 {!item.isEmpty && (
                   <>

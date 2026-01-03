@@ -14,6 +14,8 @@ import Calendar from './pages/Calendar';
 import CitySearch from './pages/CitySearch';
 import NewTrip from './pages/NewTrip';
 import LogPastTrip from './pages/LogPastTrip';
+import SectionPage from './pages/SectionPage';
+import CreatePost from './pages/CreatePost';
 
 function App() {
   return (
@@ -28,11 +30,13 @@ function App() {
           <Route path="/trips" element={<ProtectedRoute><Trips /></ProtectedRoute>} />
           <Route path="/itinerary" element={<ProtectedRoute><Itinerary /></ProtectedRoute>} />
           <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+          <Route path="/community/create" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
           <Route path="/budget" element={<ProtectedRoute><Budget /></ProtectedRoute>} />
           <Route path="/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
           <Route path="/citysearch" element={<ProtectedRoute><CitySearch /></ProtectedRoute>} />
           <Route path="/newtrip" element={<ProtectedRoute><NewTrip /></ProtectedRoute>} />
           <Route path="/log-past-trip" element={<ProtectedRoute><LogPastTrip /></ProtectedRoute>} />
+          <Route path="/section/:sectionId" element={<ProtectedRoute><SectionPage /></ProtectedRoute>} />
         </Route>
       </Routes>
     </Router>

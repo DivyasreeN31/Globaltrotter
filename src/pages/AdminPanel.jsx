@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
@@ -6,6 +7,8 @@ Chart.register(...registerables);
 const AdminPanel = () => {
   const demographicsChartRef = useRef(null);
   const activityChartRef = useRef(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState('All');
 
   useEffect(() => {
     // Demographics Pie Chart
@@ -100,45 +103,55 @@ const AdminPanel = () => {
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <span className="material-icons text-gray-400">search</span>
           </div>
-          <input 
-            className="block w-full pl-10 pr-3 py-2 border border-border-light dark:border-border-dark rounded-md leading-5 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition duration-150 ease-in-out" 
-            placeholder="Search data..." 
+          <input
+            className="block w-full pl-10 pr-3 py-2 border border-border-light dark:border-border-dark rounded-md leading-5 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition duration-150 ease-in-out"
+            placeholder="Search data..."
             type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <div className="flex flex-wrap justify-center gap-2 w-full md:w-auto">
-          <button className="inline-flex items-center px-4 py-2 border border-border-light dark:border-border-dark shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition">
-            <span className="material-icons text-sm mr-2">view_list</span>
-            Group by
-          </button>
-          <button className="inline-flex items-center px-4 py-2 border border-border-light dark:border-border-dark shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition">
-            <span className="material-icons text-sm mr-2">filter_list</span>
-            Filter
-          </button>
-          <button className="inline-flex items-center px-4 py-2 border border-border-light dark:border-border-dark shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition">
-            <span className="material-icons text-sm mr-2">sort</span>
-            Sort by...
-          </button>
+          {['All', 'Users', 'Cities', 'Activities', 'Trends'].map((filter) => (
+            <button
+              key={filter}
+              onClick={() => setActiveFilter(filter)}
+              className={`inline-flex items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-md transition-all ${activeFilter === filter
+                  ? 'bg-primary text-white border-primary'
+                  : 'text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-700'
+                }`}
+            >
+              {filter}
+            </button>
+          ))}
         </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <a className="group flex items-center justify-center px-6 py-3 border border-border-light dark:border-border-dark text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-surface-light dark:bg-surface-dark hover:text-primary hover:border-primary dark:hover:border-primary transition-all shadow-sm hover:shadow-md" href="#">
-          <span className="material-icons mr-2 text-gray-400 group-hover:text-primary">people</span>
-          Manage Users
-        </a>
-        <a className="group flex items-center justify-center px-6 py-3 border border-border-light dark:border-border-dark text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-surface-light dark:bg-surface-dark hover:text-primary hover:border-primary dark:hover:border-primary transition-all shadow-sm hover:shadow-md" href="#">
-          <span className="material-icons mr-2 text-gray-400 group-hover:text-primary">location_city</span>
-          Popular Cities
-        </a>
-        <a className="group flex items-center justify-center px-6 py-3 border border-border-light dark:border-border-dark text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-surface-light dark:bg-surface-dark hover:text-primary hover:border-primary dark:hover:border-primary transition-all shadow-sm hover:shadow-md" href="#">
-          <span className="material-icons mr-2 text-gray-400 group-hover:text-primary">local_activity</span>
-          Popular Activities
-        </a>
-        <a className="group flex items-center justify-center px-6 py-3 border-2 border-primary text-sm font-bold rounded-lg text-primary bg-blue-50 dark:bg-blue-900/20 shadow-md" href="#">
-          <span className="material-icons mr-2">trending_up</span>
-          User Trends
-        </a>
+        {(activeFilter === 'All' || activeFilter === 'Users') && (
+          <Link className="group flex items-center justify-center px-6 py-3 border border-border-light dark:border-border-dark text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-surface-light dark:bg-surface-dark hover:text-primary hover:border-primary dark:hover:border-primary transition-all shadow-sm hover:shadow-md" to="/profile">
+            <span className="material-icons mr-2 text-gray-400 group-hover:text-primary">people</span>
+            Manage Users
+          </Link>
+        )}
+        {(activeFilter === 'All' || activeFilter === 'Cities') && (
+          <Link className="group flex items-center justify-center px-6 py-3 border border-border-light dark:border-border-dark text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-surface-light dark:bg-surface-dark hover:text-primary hover:border-primary dark:hover:border-primary transition-all shadow-sm hover:shadow-md" to="/explore">
+            <span className="material-icons mr-2 text-gray-400 group-hover:text-primary">location_city</span>
+            Popular Cities
+          </Link>
+        )}
+        {(activeFilter === 'All' || activeFilter === 'Activities') && (
+          <Link className="group flex items-center justify-center px-6 py-3 border border-border-light dark:border-border-dark text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-surface-light dark:bg-surface-dark hover:text-primary hover:border-primary dark:hover:border-primary transition-all shadow-sm hover:shadow-md" to="/explore">
+            <span className="material-icons mr-2 text-gray-400 group-hover:text-primary">local_activity</span>
+            Popular Activities
+          </Link>
+        )}
+        {(activeFilter === 'All' || activeFilter === 'Trends') && (
+          <Link className="group flex items-center justify-center px-6 py-3 border-2 border-primary text-sm font-bold rounded-lg text-primary bg-blue-50 dark:bg-blue-900/20 shadow-md" to="/dashboard">
+            <span className="material-icons mr-2">trending_up</span>
+            User Trends
+          </Link>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -211,9 +224,9 @@ const AdminPanel = () => {
             <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
               This section is responsible for managing users and their actions. Admins can view trips made by users and access other functionalities.
             </p>
-            <button className="mt-4 w-full py-2 text-sm text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/10 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/20 font-medium transition">
+            <Link to="/profile" className="mt-4 w-full py-2 text-sm text-center inline-block text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/10 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/20 font-medium transition">
               Go to Users
-            </button>
+            </Link>
           </div>
 
           <div className="bg-surface-light dark:bg-surface-dark rounded-xl shadow-md border border-border-light dark:border-border-dark p-6 transition hover:shadow-lg">
@@ -227,9 +240,9 @@ const AdminPanel = () => {
               Lists all popular cities users are currently visiting based on trending data.
             </p>
             <div className="mt-4 flex -space-x-2 overflow-hidden">
-              <img alt="Paris" className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-gray-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB91Z4SrV04zPnYwM8kYxj8Ourpsvy2IMIsDXe7bgtKtjNO3hYPjIHzbKc4ighTDkqrI1Ba6f80hoewHr8gsoDirsyO3ZaX5n6BesNMjw54sjMg-GBnE3iVwjDnmUChP7QU_x8uJrJdhzXANXzJ9dmMP2Ie2wob72-BYcKITJnZX_m5yQKk56Ce8yJNYz9WUB8RU7RI41CnBs_W_rn9PRif1P6SqGbBVc0en7B7BKHiipfie8bFzBM2Aep0TxhZro0LtcDYNjkY_XPL"/>
-              <img alt="Resort" className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-gray-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCr0yhMNcyvH8DfMTY835oHAHE80LEiGKhu6wnOG5ndaRE9fhCmGxkjbwFnwnmtg9vo3qLpokMJAh2S1QEEdblvqnrQIyQcBb_FQ7zr8jHjneOOGCFQLj79kmk9kutOrLycjIVcTvtvobzFoTMrx3C5G6oKyCQ-SItQB02Ie5JZN_d-UI7EVdQkf0RIUiw7Obq2C4hdvt3iPw5HbJRuev3mkiU-q8W65WaIsMXLW-SUK_wObMw4hUXFvOf9Djml4PZF2-5m_5lc1zRW"/>
-              <img alt="City" className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-gray-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR7vDUsJ-PGGnM8X0NXp8V-rlRTNurkZ8tC254lYEh45xdHXLwREWuvY7Ka6o429-MYME_YE0cQiisKFJtdFxO4fvndyrkpTvTv5dGat0CZUQBV8bYmK7XTdbGVXV4lBDOcIqfJQHyoPliqvhDuhNHy6o9Ak58fspyOj9Vj-oTEQBUPlAF8vlJM4yFw0NDmNMfuu2kkX9pDU2g8Z-VWtmYpbcSoVc1d0c_fkYqvK8fERjasKAuf2vtWxCQvoURtaVp72Tio4N1hekV"/>
+              <img alt="Paris" className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-gray-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB91Z4SrV04zPnYwM8kYxj8Ourpsvy2IMIsDXe7bgtKtjNO3hYPjIHzbKc4ighTDkqrI1Ba6f80hoewHr8gsoDirsyO3ZaX5n6BesNMjw54sjMg-GBnE3iVwjDnmUChP7QU_x8uJrJdhzXANXzJ9dmMP2Ie2wob72-BYcKITJnZX_m5yQKk56Ce8yJNYz9WUB8RU7RI41CnBs_W_rn9PRif1P6SqGbBVc0en7B7BKHiipfie8bFzBM2Aep0TxhZro0LtcDYNjkY_XPL" />
+              <img alt="Resort" className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-gray-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCr0yhMNcyvH8DfMTY835oHAHE80LEiGKhu6wnOG5ndaRE9fhCmGxkjbwFnwnmtg9vo3qLpokMJAh2S1QEEdblvqnrQIyQcBb_FQ7zr8jHjneOOGCFQLj79kmk9kutOrLycjIVcTvtvobzFoTMrx3C5G6oKyCQ-SItQB02Ie5JZN_d-UI7EVdQkf0RIUiw7Obq2C4hdvt3iPw5HbJRuev3mkiU-q8W65WaIsMXLW-SUK_wObMw4hUXFvOf9Djml4PZF2-5m_5lc1zRW" />
+              <img alt="City" className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-gray-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR7vDUsJ-PGGnM8X0NXp8V-rlRTNurkZ8tC254lYEh45xdHXLwREWuvY7Ka6o429-MYME_YE0cQiisKFJtdFxO4fvndyrkpTvTv5dGat0CZUQBV8bYmK7XTdbGVXV4lBDOcIqfJQHyoPliqvhDuhNHy6o9Ak58fspyOj9Vj-oTEQBUPlAF8vlJM4yFw0NDmNMfuu2kkX9pDU2g8Z-VWtmYpbcSoVc1d0c_fkYqvK8fERjasKAuf2vtWxCQvoURtaVp72Tio4N1hekV" />
               <div className="h-8 w-8 rounded-full ring-2 ring-white dark:ring-gray-800 bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs font-medium text-gray-500 dark:text-gray-300">+12</div>
             </div>
           </div>

@@ -42,7 +42,7 @@ const Header = () => {
 
     // Listen for custom auth change event
     window.addEventListener('authChange', checkAuth);
-    
+
     return () => {
       unsubscribe();
       window.removeEventListener('authChange', checkAuth);
@@ -91,63 +91,66 @@ const Header = () => {
             </Link>
             {isAuthenticated && (
               <nav className="hidden md:flex items-center gap-1">
-                <Link 
-                  to="/trips" 
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                    isActive('/trips') 
-                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20' 
+                <Link
+                  to="/trips"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/trips')
+                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
                       : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
+                    }`}
                 >
                   My Trips
                 </Link>
-                <Link 
+                <Link
                   to="/explore"
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                    isActive('/explore') 
-                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20' 
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/explore')
+                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
                       : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
+                    }`}
                 >
                   Explore
                 </Link>
-                <Link 
-                  to="/itinerary" 
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                    isActive('/itinerary') 
-                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20' 
+                <Link
+                  to="/itinerary"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/itinerary')
+                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
                       : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
+                    }`}
                 >
                   Itinerary
                 </Link>
-                <Link 
-                  to="/community" 
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                    isActive('/community') 
-                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20' 
+                <Link
+                  to="/community"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/community')
+                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
                       : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
+                    }`}
                 >
                   Community
                 </Link>
-                <Link 
-                  to="/" 
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                    isActive('/') 
-                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20' 
+                <Link
+                  to="/budget"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/budget')
+                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
                       : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
+                    }`}
+                >
+                  Budget
+                </Link>
+                <Link
+                  to="/"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/')
+                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
+                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
+                    }`}
                 >
                   Dashboard
                 </Link>
-                <Link 
-                  to="/profile" 
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                    isActive('/profile') 
-                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20' 
+                <Link
+                  to="/profile"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive('/profile')
+                      ? 'text-primary bg-blue-50 dark:bg-blue-900/20'
                       : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
+                    }`}
                 >
                   Profile
                 </Link>
